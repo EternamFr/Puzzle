@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		244E27E81A34A450000D626A /* GameController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 244E27E71A34A450000D626A /* GameController.swift */; };
 		24CCBA2C1A1552BE008357B0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24CCBA2B1A1552BE008357B0 /* AppDelegate.swift */; };
 		24CCBA2E1A1552BE008357B0 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24CCBA2D1A1552BE008357B0 /* ViewController.swift */; };
 		24CCBA311A1552BE008357B0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 24CCBA2F1A1552BE008357B0 /* Main.storyboard */; };
@@ -26,6 +27,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		244E27E71A34A450000D626A /* GameController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameController.swift; sourceTree = "<group>"; };
 		24CCBA261A1552BE008357B0 /* Puzzle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Puzzle.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		24CCBA2A1A1552BE008357B0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		24CCBA2B1A1552BE008357B0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -56,6 +58,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		244E27E61A34A413000D626A /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				244E27E71A34A450000D626A /* GameController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
 		24CCBA1D1A1552BE008357B0 = {
 			isa = PBXGroup;
 			children = (
@@ -77,6 +87,7 @@
 		24CCBA281A1552BE008357B0 /* Puzzle */ = {
 			isa = PBXGroup;
 			children = (
+				244E27E61A34A413000D626A /* Controllers */,
 				24CCBA2B1A1552BE008357B0 /* AppDelegate.swift */,
 				24CCBA2D1A1552BE008357B0 /* ViewController.swift */,
 				24CCBA2F1A1552BE008357B0 /* Main.storyboard */,
@@ -213,6 +224,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				24CCBA2E1A1552BE008357B0 /* ViewController.swift in Sources */,
+				244E27E81A34A450000D626A /* GameController.swift in Sources */,
 				24CCBA2C1A1552BE008357B0 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -405,6 +417,7 @@
 				24CCBA471A1552BE008357B0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		24CCBA481A1552BE008357B0 /* Build configuration list for PBXNativeTarget "PuzzleTests" */ = {
 			isa = XCConfigurationList;
@@ -413,6 +426,7 @@
 				24CCBA4A1A1552BE008357B0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

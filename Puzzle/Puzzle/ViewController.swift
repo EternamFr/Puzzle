@@ -10,9 +10,20 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    @IBOutlet weak var LblDebug: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        var v = UIView(frame: CGRectMake(50, 50, 150, 150))
+        v.backgroundColor = UIColor.blueColor()
+        self.view.addSubview(v)
+        
+        let b = UIScreen.mainScreen().bounds
+        
+        LblDebug.text = "Width: \(b.width) Height: \(b.height)"
+        LblDebug.sizeToFit()
+        LblDebug.setNeedsLayout()
     }
 
     override func didReceiveMemoryWarning() {
