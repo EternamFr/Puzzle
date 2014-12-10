@@ -11,6 +11,7 @@ import UIKit
 class ViewController: UIViewController {
 
     @IBOutlet weak var LblDebug: UILabel!
+    var _gameController: GameController?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,6 +25,11 @@ class ViewController: UIViewController {
         LblDebug.text = "Width: \(b.width) Height: \(b.height)"
         LblDebug.sizeToFit()
         LblDebug.setNeedsLayout()
+        
+        //
+        _gameController = GameController(dimensionX: 3, dimensionY: 2, size: b)
+        _gameController?.initializeNewGame()
+        
     }
 
     override func didReceiveMemoryWarning() {
