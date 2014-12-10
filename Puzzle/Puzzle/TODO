@@ -1,6 +1,19 @@
+------------------------------------
+// BoardModel interface
+------------------------------------
+* Message to handle:
+- Does these 2 cardslots match?
+
+* Message to send:
+- These 2 cards match
+- These 2 cards don't match
+- Game over (win)... can't loose at that game :-)
+
+------------------------------------
 // BoardView interface
+------------------------------------
 * Messages to handle:
-- spawn new board
+- display spawning of a new board
 - rotate a card back to front
 - resolve 2 cards matching
 - resolve 2 cards no matching
@@ -9,12 +22,3 @@
 * Message to send:
 - flip a card
 - restart a game/go to menu
-
-// BoardModel interface
-* Message to handle:
-- Does these 2 cards match?
-
-* Message to send:
-- These 2 cards match
-- These 2 cards don't match
-- Game over (win)... can't loose at that game :-)

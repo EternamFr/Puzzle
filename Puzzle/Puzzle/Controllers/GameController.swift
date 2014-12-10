@@ -7,20 +7,41 @@
 //
 
 import Foundation
-import UIKit
 
 class GameEngine {
-
-
-    let _size: CGRect
     
+    private var gameBoard: GameBoard?
     
-    init(size:CGRect) {
-        _size = size
+    init() {
+        
     }
     
-    func initializeNewGame(){
-
+    // TODO: add rows/columns as parameter as well as cards'theme
+    func setupNewGame(){
+        gameBoard = GameBoard(rows: 3, columns:2)
+        
+        populateGameBoardWithPairsOfCards(&gameBoard!)
+    }
+    
+    private func populateGameBoardWithPairsOfCards(inout board: GameBoard) {
+        let dimensions = gameBoard!.getDimensions()
+        
+        var ct: CardType?
+        var binome: Int = 0
+        for c in 0..<dimensions.columns {
+            for r in 0..<dimensions.rows {
+                if ct == nil {
+                    ct = CardType.getRandomCardType()
+                }
+                binome += 1  
+                gameBoard?[r, c] = CardSlot.Card(ct!)
+                
+                if binome == 2 {
+                    ct = nil
+                    binome = 0
+                }
+            }
+        }
     }
     
 }

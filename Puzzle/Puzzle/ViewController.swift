@@ -11,7 +11,7 @@ import UIKit
 class ViewController: UIViewController {
 
     @IBOutlet weak var LblDebug: UILabel!
-    var _gameController: GameController?
+    var _gameEngine: GameEngine?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,8 +27,9 @@ class ViewController: UIViewController {
         LblDebug.setNeedsLayout()
         
         //
-        _gameController = GameController(dimensionX: 3, dimensionY: 2, size: b)
-        _gameController?.initializeNewGame()
+        _gameEngine = GameEngine()
+        _gameEngine?.setupNewGame()
+        //_gameController?.initializeNewGame()
         
     }
 

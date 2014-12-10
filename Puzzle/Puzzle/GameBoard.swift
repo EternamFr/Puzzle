@@ -24,6 +24,10 @@ struct GameBoard {
         return row >= 0 && row < rows && column >= 0 && column < columns
     }
     
+    func getDimensions() -> (rows: Int, columns: Int) {
+        return (self.rows, self.columns)
+    }
+    
     subscript(row: Int, column: Int) -> CardSlot {
         get {
             assert(indexIsValidForRow(row, column: column), "Index out of range")
@@ -62,9 +66,14 @@ enum CardType: Int {
         }
     }
     
+    static func getCardTypeCount() -> Int {
+        return 4
+    }
+    
     static func getRandomCardType() -> CardType {
         // TODO: add the possibility to choose a set of card based on a theme (jungle, pirate, halloween...)
-        let randomInt = Int(arc4random_uniform(4))
+        srandom(arc4random())
+        let randomInt = random() % getCardTypeCount()
         
         if let cardType = CardType(rawValue: randomInt) {
             return cardType
@@ -74,3 +83,12 @@ enum CardType: Int {
     }
     
 }
+
+typealias IsGameOver = Bool
+
+// An enum representing whether 2 cardslots match or not and if the game is over
+enum CardSlotsMatchingResult {
+    case DontMatch
+    case DoMatch(IsGameOver)
+}
+
