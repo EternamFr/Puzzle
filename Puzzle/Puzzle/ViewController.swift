@@ -29,7 +29,6 @@ class ViewController: UIViewController {
         //
         _gameEngine = GameEngine()
         _gameEngine?.setupNewGame()
-        //_gameController?.initializeNewGame()
         
     }
 
