@@ -11,10 +11,12 @@ import UIKit
 class ViewController: UIViewController {
 
     @IBOutlet weak var LblDebug: UILabel!
-    var _gameEngine: GameEngine?
+    var gameEngine: GameEngine?
+    var gameBoardView: GameBoardView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         // Do any additional setup after loading the view, typically from a nib.
         var v = UIView(frame: CGRectMake(50, 50, 150, 150))
         v.backgroundColor = UIColor.blueColor()
@@ -22,14 +24,14 @@ class ViewController: UIViewController {
         
         let b = UIScreen.mainScreen().bounds
         
-        LblDebug.text = "Width: \(b.width) Height: \(b.height)"
-        LblDebug.sizeToFit()
-        LblDebug.setNeedsLayout()
-        
         //
-        _gameEngine = GameEngine()
-        _gameEngine?.setupNewGame()
+        gameEngine = GameEngine()
+        gameEngine?.setupNewGame()
         
+        gameBoardView = GameBoardView(dimensionX: 3, dimensionY: 2)
+        self.view.addSubview(gameBoardView!)
+        gameBoardView?.insertCard(1, column: 2, text: "(1,2) Lion")
+        gameBoardView?.insertCard(0, column: 0, text: "(0,0) Rhino")
     }
 
     override func didReceiveMemoryWarning() {
