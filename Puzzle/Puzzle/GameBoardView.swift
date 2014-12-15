@@ -8,7 +8,7 @@
 
 import UIKit
 
-class GameBoardView: UIView {
+class GameBoardView: UIView, CardViewProtocol {
 
     private var dimensionX: Int
     private var dimensionY: Int
@@ -20,7 +20,7 @@ class GameBoardView: UIView {
     let tilePopStartScale: CGFloat = 0.1
     let tilePopMaxScale: CGFloat = 1.1
     let tilePopDelay: NSTimeInterval = 0.05
-    let tileExpandTime: NSTimeInterval = 0.18
+    let tileExpandTime: NSTimeInterval = 0.5 // 0.18
     let tileContractTime: NSTimeInterval = 0.08
     
     /*
@@ -50,20 +50,31 @@ class GameBoardView: UIView {
         let tileX = (2 * (CGFloat(column) + 1.0) - 1.0) * tileWidth
         let tileY = (2 * (CGFloat(row) + 1.0) - 1.0) * tileHeight
 
-        let cardView:CardView = CardView(text: text, position: CGPoint(x: tileX, y: tileY), width: tileWidth, height: tileHeight)
+        let cardView:CardView = CardView(text: text, position: CGPoint(x: tileX, y: tileY), width: tileWidth, height: tileHeight, delegate: self)
+        //cardView.alpha = 0.0
         addSubview(cardView)
         
+        bounce(cardView)
+    }
+    
+    func bounce(cardView: CardView) {
         UIView.animateWithDuration(tileExpandTime, delay: tilePopDelay, options: UIViewAnimationOptions.TransitionNone,
             animations: { () -> Void in
                 // Make the tile 'pop'
                 cardView.layer.setAffineTransform(CGAffineTransformMakeScale(self.tilePopMaxScale, self.tilePopMaxScale))
+                //cardView.alpha = 0.5
             },
             completion: { (finished: Bool) -> Void in
                 // Shrink the tile after it 'pops'
                 UIView.animateWithDuration(self.tileContractTime, animations: { () -> Void in
                     cardView.layer.setAffineTransform(CGAffineTransformIdentity)
+                    //cardView.alpha = 1.0
                 })
         })
+    }
+    
+    func isTapped(cardView: CardView) {
+        bounce(cardView)
     }
     
 }

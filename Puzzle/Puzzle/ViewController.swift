@@ -20,6 +20,10 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
         var v = UIView(frame: CGRectMake(50, 50, 150, 150))
         v.backgroundColor = UIColor.blueColor()
+        v.layer.cornerRadius = 10.0
+        v.layer.masksToBounds = true
+        v.layer.borderWidth = 4.0
+        v.layer.borderColor = UIColor.redColor().CGColor
         self.view.addSubview(v)
         
         let b = UIScreen.mainScreen().bounds
