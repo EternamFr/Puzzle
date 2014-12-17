@@ -20,8 +20,8 @@ class GameBoardView: UIView, CardViewProtocol {
     let tilePopStartScale: CGFloat = 0.1
     let tilePopMaxScale: CGFloat = 1.1
     let tilePopDelay: NSTimeInterval = 0.05
-    let tileExpandTime: NSTimeInterval = 0.5 // 0.18
-    let tileContractTime: NSTimeInterval = 0.08
+    let tileExpandTime: NSTimeInterval = 0.4 // 0.18
+    let tileContractTime: NSTimeInterval = 0.4
     
     /*
     // Only override drawRect: if you perform custom drawing.
@@ -73,8 +73,22 @@ class GameBoardView: UIView, CardViewProtocol {
         })
     }
     
+    func flip(cardView: CardView) {
+        UIView.animateWithDuration(tileExpandTime, delay: tilePopDelay, options: UIViewAnimationOptions.TransitionNone,
+            animations: { () -> Void in
+                var rotationMatrix = CATransform3DMakeRotation(CGFloat(M_PI * 90.0 / 180.0), 0.0, 1.0, 0.0)
+                cardView.layer.transform = rotationMatrix
+            },
+            completion: { (finished: Bool) -> Void in
+                // Shrink the tile after it 'pops'
+                UIView.animateWithDuration(self.tileContractTime, animations: { () -> Void in
+                    cardView.layer.transform = CATransform3DIdentity
+                })
+        })
+    }
+    
     func isTapped(cardView: CardView) {
-        bounce(cardView)
+        flip(cardView)
     }
     
 }
