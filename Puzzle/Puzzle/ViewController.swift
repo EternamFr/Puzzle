@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, CardViewTappedProtocol {
 
     @IBOutlet weak var LblDebug: UILabel!
     var gameEngine: GameEngine?
@@ -32,9 +32,9 @@ class ViewController: UIViewController {
         gameEngine = GameEngine()
         gameEngine?.setupNewGame()
         
-        gameBoardView = GameBoardView(dimensionX: 3, dimensionY: 2)
+        gameBoardView = GameBoardView(dimensionX: 3, dimensionY: 2, delegate: self)
         self.view.addSubview(gameBoardView!)
-        gameBoardView?.insertCard(1, column: 2, text: "(1,2) Lion")
+        gameBoardView?.insertCard(1, column: 2, text: "(2,1) Lion")
         gameBoardView?.insertCard(0, column: 0, text: "(0,0) Rhino")
     }
 
@@ -43,6 +43,8 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
-
+    func cardViewTapped(cardView: CardView, row: Int, column: Int) {
+        gameEngine?.cardTapped(row, column: column)
+    }
 }
 

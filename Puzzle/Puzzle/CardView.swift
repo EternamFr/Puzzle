@@ -8,14 +8,16 @@
 
 import UIKit
 
-protocol CardViewProtocol {
-    func isTapped(cardView: CardView)
+protocol CardViewTappedProtocol {
+    func cardViewTapped(cardView: CardView, row: Int, column: Int)
 }
 
 class CardView: UIView {
     
     var textLabel: UILabel
-    let delegate: CardViewProtocol
+    let row: Int
+    let column: Int
+    let delegateCardViewTapped: CardViewTappedProtocol
     
     /*
     // Only override drawRect: if you perform custom drawing.
@@ -25,14 +27,17 @@ class CardView: UIView {
     }
     */
     
-    init(text: String, position: CGPoint, width: CGFloat, height:CGFloat, delegate: CardViewProtocol) {
+    init(text: String, position: CGPoint, width: CGFloat, height:CGFloat, row: Int, column:Int, delegate: CardViewTappedProtocol) {
         textLabel = UILabel(frame: CGRectMake(0, 0, width, width))
         textLabel.textAlignment = NSTextAlignment.Center
         textLabel.text = text
         textLabel.textColor = UIColor.blackColor()
         textLabel.textAlignment = NSTextAlignment.Center
         
-        self.delegate = delegate
+        self.row = row
+        self.column = column
+        
+        self.delegateCardViewTapped = delegate
         
         super.init(frame:CGRectMake(position.x, position.y, width, height))
         
@@ -42,16 +47,16 @@ class CardView: UIView {
         
         applyHoverShadow(self)
         
-        var tapRecognizer = UITapGestureRecognizer(target: self, action: Selector("handleCardTapped:"))
+        var tapRecognizer = UITapGestureRecognizer(target: self, action: Selector("handleCardViewTapped:"))
         self.addGestureRecognizer(tapRecognizer)
         self.userInteractionEnabled = true;
         self.exclusiveTouch = true;
     }
 
-    func handleCardTapped(recognizer: UITapGestureRecognizer) {
-        println("Tapped!!!")
+    func handleCardViewTapped(recognizer: UITapGestureRecognizer) {
+        println(self.textLabel.text! + " tapped!!!")
         self.backgroundColor = UIColor.orangeColor()
-        delegate.isTapped(self)
+        delegateCardViewTapped.cardViewTapped(self,row: row, column: column)
     }
     
     func applyPlainShadow(view: UIView) {

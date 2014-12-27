@@ -8,17 +8,17 @@
 
 import Foundation
 
-class GameEngine {
+class GameEngine: CardTappedProtocol {
     
     private var gameBoard: GameBoard?
+    private var firstCardTapped: CardType?
     
     init() {
-        
     }
     
     // TODO: add rows/columns as parameter as well as cards'theme
     func setupNewGame(){
-        gameBoard = GameBoard(rows: 3, columns:2)
+        gameBoard = GameBoard(rows: 2, columns:3)
         
         populateGameBoardWithPairsOfCards(&gameBoard!)
     }
@@ -44,4 +44,28 @@ class GameEngine {
         }
     }
     
+    private func cardHasBeenTapped(cardType: CardType) {
+        let cards = (firstCardTapped, cardType)
+        switch cards {
+        case (nil, _):
+            firstCardTapped = cardType
+        case (_ , _) where cards.0 == cards.1:
+            // Matching
+            firstCardTapped = nil
+        default:
+            // Not matching
+            firstCardTapped = nil
+        }
+    }
+    
+    func cardTapped(row: Int, column: Int) {
+        let cardSlotAt = gameBoard?[row,column]
+        
+        switch cardSlotAt! {
+        case .Empty:
+            break
+        case let .Card(ct):
+            cardHasBeenTapped(ct)
+        }
+    }
 }

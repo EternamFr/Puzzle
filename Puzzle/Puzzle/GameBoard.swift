@@ -8,6 +8,10 @@
 
 import Foundation
 
+protocol CardTappedProtocol {
+    func cardTapped(row: Int, column: Int)
+}
+
 struct GameBoard {
    
     let rows: Int, columns: Int
@@ -45,6 +49,13 @@ struct GameBoard {
 enum CardSlot {
     case Empty
     case Card(CardType)
+    
+    func getCardType() -> Int {
+        switch self {
+        case .Empty: return 0
+        case let .Card(ct): return ct.rawValue
+        }
+    }
 }
 
 enum CardType: Int {

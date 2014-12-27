@@ -8,8 +8,10 @@
 
 import UIKit
 
-class GameBoardView: UIView, CardViewProtocol {
+class GameBoardView: UIView, CardViewTappedProtocol {
 
+    let delegate: CardViewTappedProtocol
+    
     private var dimensionX: Int
     private var dimensionY: Int
     
@@ -30,9 +32,10 @@ class GameBoardView: UIView, CardViewProtocol {
         // Drawing code
     }
     */
-    init(dimensionX dX: Int, dimensionY dY: Int) {
+    init(dimensionX dX: Int, dimensionY dY: Int, delegate: CardViewTappedProtocol) {
         dimensionX = dX
         dimensionY = dY
+        self.delegate = delegate
         
         let b = UIScreen.mainScreen().bounds
         
@@ -50,7 +53,7 @@ class GameBoardView: UIView, CardViewProtocol {
         let tileX = (2 * (CGFloat(column) + 1.0) - 1.0) * tileWidth
         let tileY = (2 * (CGFloat(row) + 1.0) - 1.0) * tileHeight
 
-        let cardView:CardView = CardView(text: text, position: CGPoint(x: tileX, y: tileY), width: tileWidth, height: tileHeight, delegate: self)
+        let cardView:CardView = CardView(text: text, position: CGPoint(x: tileX, y: tileY), width: tileWidth, height: tileHeight, row: row, column: column, delegate: self)
         //cardView.alpha = 0.0
         addSubview(cardView)
         
@@ -87,8 +90,10 @@ class GameBoardView: UIView, CardViewProtocol {
         })
     }
     
-    func isTapped(cardView: CardView) {
+    func cardViewTapped(cardView: CardView, row: Int, column: Int) {
         flip(cardView)
+        
+        delegate.cardViewTapped(cardView, row: row, column: column)
     }
     
 }
