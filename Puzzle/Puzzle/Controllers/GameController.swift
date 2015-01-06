@@ -16,9 +16,9 @@ class GameEngine: CardTappedProtocol {
     init() {
     }
     
-    // TODO: add rows/columns as parameter as well as cards'theme
-    func setupNewGame(){
-        gameBoard = GameBoard(rows: 2, columns:3)
+    // TODO: add cards'theme as parameter
+    func setupNewGame(rows: Int, columns: Int){
+        gameBoard = GameBoard(rows: rows, columns: columns)
         
         populateGameBoardWithPairsOfCards(&gameBoard!)
     }
@@ -44,6 +44,22 @@ class GameEngine: CardTappedProtocol {
         }
     }
     
+    // Should return GameBoardViewModel
+    //func getGameBoardCards() -> [CardSlot] {
+    //    let board = gameBoard?.board
+    //    return board!
+    //}
+
+    func getGameBoardCards() -> [CardViewModel] {
+        let board = gameBoard?.board
+        let (rows,columns) = gameBoard!.getDimensions()
+        
+        let indexes = map(0..<gameBoard!.board.count, { $0 })
+        
+        let viewModels = indexes.map{CardViewModel(row: $0 % rows, column: $0 % columns, cardSlot: board![$0])}
+        return viewModels
+    }
+    
     private func cardHasBeenTapped(cardType: CardType) {
         let cards = (firstCardTapped, cardType)
         switch cards {
@@ -67,5 +83,16 @@ class GameEngine: CardTappedProtocol {
         case let .Card(ct):
             cardHasBeenTapped(ct)
         }
+    }
+}
+
+struct CardViewModel {
+    let row: Int, column: Int
+    let cardSlot: CardSlot
+    
+    init(row: Int, column: Int, cardSlot: CardSlot) {
+        self.row = row
+        self.column = column
+        self.cardSlot = cardSlot
     }
 }

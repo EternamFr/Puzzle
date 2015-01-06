@@ -30,12 +30,15 @@ class ViewController: UIViewController, CardViewTappedProtocol {
         
         //
         gameEngine = GameEngine()
-        gameEngine?.setupNewGame()
+        gameEngine?.setupNewGame(2, columns: 3)
         
-        gameBoardView = GameBoardView(dimensionX: 3, dimensionY: 2, delegate: self)
+        gameBoardView = GameBoardView(rows: 2, columns: 3, delegate: self)
         self.view.addSubview(gameBoardView!)
-        gameBoardView?.insertCard(1, column: 2, text: "(2,1) Lion")
-        gameBoardView?.insertCard(0, column: 0, text: "(0,0) Rhino")
+        
+        self.spawnCardViews()
+        
+        //gameBoardView?.insertCard(1, column: 2, text: "(2,1) Lion")
+        //gameBoardView?.insertCard(0, column: 0, text: "(0,0) Rhino")
     }
 
     override func didReceiveMemoryWarning() {
@@ -43,6 +46,13 @@ class ViewController: UIViewController, CardViewTappedProtocol {
         // Dispose of any resources that can be recreated.
     }
 
+    func spawnCardViews() {
+        let cardViewModels: [CardViewModel] = gameEngine!.getGameBoardCards()
+        
+        map(cardViewModels, {print("row: \($0.row) column: \($0.column)")})
+        map(cardViewModels, {self.gameBoardView?.insertCard($0.row, column: $0.column, text: "(\($0.column),\($0.row)) \($0.cardSlot.getCardType())")})
+    }
+    
     func cardViewTapped(cardView: CardView, row: Int, column: Int) {
         gameEngine?.cardTapped(row, column: column)
     }

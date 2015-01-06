@@ -9,7 +9,7 @@
 import UIKit
 
 protocol CardViewTappedProtocol {
-    func cardViewTapped(cardView: CardView, row: Int, column: Int)
+    func cardViewTapped(cardView: CardView, row: Int, column: Int);
 }
 
 class CardView: UIView {

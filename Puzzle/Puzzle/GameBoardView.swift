@@ -12,8 +12,8 @@ class GameBoardView: UIView, CardViewTappedProtocol {
 
     let delegate: CardViewTappedProtocol
     
-    private var dimensionX: Int
-    private var dimensionY: Int
+    private var columns: Int
+    private var rows: Int
     
     private var tileWidth: CGFloat
     private var tileHeight: CGFloat
@@ -32,15 +32,15 @@ class GameBoardView: UIView, CardViewTappedProtocol {
         // Drawing code
     }
     */
-    init(dimensionX dX: Int, dimensionY dY: Int, delegate: CardViewTappedProtocol) {
-        dimensionX = dX
-        dimensionY = dY
+    init(rows: Int, columns: Int, delegate: CardViewTappedProtocol) {
+        self.rows = rows
+        self.columns = columns
         self.delegate = delegate
         
         let b = UIScreen.mainScreen().bounds
         
-        tileWidth = b.width / ((CGFloat(dimensionX) * 2) + 1)
-        tileHeight = b.height / ((CGFloat(dimensionY) * 2) + 1)
+        tileWidth = b.width / ((CGFloat(columns) * 2) + 1)
+        tileHeight = b.height / ((CGFloat(rows) * 2) + 1)
         
         super.init(frame: CGRectMake(0, 0, b.width, b.height))
     }

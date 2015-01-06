@@ -102,4 +102,3 @@ enum CardSlotsMatchingResult {
     case DontMatch
     case DoMatch(IsGameOver)
 }
-
