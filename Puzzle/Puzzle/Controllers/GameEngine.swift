@@ -8,6 +8,10 @@
 
 import Foundation
 
+protocol CardTappedProtocol {
+    func cardTapped(row: Int, column: Int)
+}
+
 class GameEngine: CardTappedProtocol {
     
     private var gameBoard: GameBoard?
@@ -68,12 +72,15 @@ class GameEngine: CardTappedProtocol {
         case (_ , _) where cards.0 == cards.1:
             // Matching
             firstCardTapped = nil
+            println("Matching!")
         default:
             // Not matching
             firstCardTapped = nil
+            println("Not matching!")
         }
     }
     
+    // CardTappedProtocol
     func cardTapped(row: Int, column: Int) {
         let cardSlotAt = gameBoard?[row,column]
         
@@ -83,16 +90,5 @@ class GameEngine: CardTappedProtocol {
         case let .Card(ct):
             cardHasBeenTapped(ct)
         }
-    }
-}
-
-struct CardViewModel {
-    let row: Int, column: Int
-    let cardSlot: CardSlot
-    
-    init(row: Int, column: Int, cardSlot: CardSlot) {
-        self.row = row
-        self.column = column
-        self.cardSlot = cardSlot
     }
 }

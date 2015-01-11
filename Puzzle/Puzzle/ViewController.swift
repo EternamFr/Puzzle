@@ -36,9 +36,6 @@ class ViewController: UIViewController, CardViewTappedProtocol {
         self.view.addSubview(gameBoardView!)
         
         self.spawnCardViews()
-        
-        //gameBoardView?.insertCard(1, column: 2, text: "(2,1) Lion")
-        //gameBoardView?.insertCard(0, column: 0, text: "(0,0) Rhino")
     }
 
     override func didReceiveMemoryWarning() {
@@ -49,8 +46,7 @@ class ViewController: UIViewController, CardViewTappedProtocol {
     func spawnCardViews() {
         let cardViewModels: [CardViewModel] = gameEngine!.getGameBoardCards()
         
-        map(cardViewModels, {print("row: \($0.row) column: \($0.column)")})
-        map(cardViewModels, {self.gameBoardView?.insertCard($0.row, column: $0.column, text: "(\($0.column),\($0.row)) \($0.cardSlot.getCardType())")})
+        map(cardViewModels, {self.gameBoardView?.insertCard($0.row, column: $0.column, text: "(\($0.column),\($0.row)) \($0.cardSlot.getCardType().simpleDescription())")})
     }
     
     func cardViewTapped(cardView: CardView, row: Int, column: Int) {
