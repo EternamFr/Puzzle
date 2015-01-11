@@ -10,7 +10,7 @@ import UIKit
 
 class GameBoardView: UIView, CardViewTappedProtocol {
 
-    let delegate: CardViewTappedProtocol
+    private let delegate: CardViewTappedProtocol
     
     private var columns: Int
     private var rows: Int
@@ -90,6 +90,7 @@ class GameBoardView: UIView, CardViewTappedProtocol {
         })
     }
     
+    // CardViewTappedProtocol
     func cardViewTapped(cardView: CardView, row: Int, column: Int) {
         flip(cardView)
         

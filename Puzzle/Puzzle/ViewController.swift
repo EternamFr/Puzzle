@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController, CardViewTappedProtocol {
+class ViewController: UIViewController, CardViewTappedProtocol, ResolveMatchingCardsResultProtocol {
 
     @IBOutlet weak var LblDebug: UILabel!
     var gameEngine: GameEngine?
@@ -29,7 +29,7 @@ class ViewController: UIViewController, CardViewTappedProtocol {
         let b = UIScreen.mainScreen().bounds
         
         //
-        gameEngine = GameEngine()
+        gameEngine = GameEngine(delegate: self)
         gameEngine?.setupNewGame(2, columns: 3)
         
         gameBoardView = GameBoardView(rows: 2, columns: 3, delegate: self)
@@ -49,8 +49,24 @@ class ViewController: UIViewController, CardViewTappedProtocol {
         map(cardViewModels, {self.gameBoardView?.insertCard($0.row, column: $0.column, text: "(\($0.column),\($0.row)) \($0.cardSlot.getCardType().simpleDescription())")})
     }
     
+    // CardViewTappedProtocol
     func cardViewTapped(cardView: CardView, row: Int, column: Int) {
         gameEngine?.cardTapped(row, column: column)
+    }
+    
+    // ResolveMatchingCardsResultProtocol
+    func resolveMatchingCardsResult(result: CardsMatchingResult) {
+            switch result {
+            case .DontMatch:
+                // Unflip the cards
+                println("DOnt match")
+            case .DoMatch(false):
+                println("Match, but game goes on!")
+            case .DoMatch(true):
+                println("Match... and game over!")
+            default:
+                println("What could that be ?!?")
+        }
     }
 }
 

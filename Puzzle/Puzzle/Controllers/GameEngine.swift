@@ -12,12 +12,18 @@ protocol CardTappedProtocol {
     func cardTapped(row: Int, column: Int)
 }
 
+protocol ResolveMatchingCardsResultProtocol {
+    func resolveMatchingCardsResult(result: CardsMatchingResult)
+}
+
 class GameEngine: CardTappedProtocol {
     
     private var gameBoard: GameBoard?
-    private var firstCardTapped: CardType?
+    private var firstCardTapped: (row: Int, column: Int)?
+    private let delegate: ResolveMatchingCardsResultProtocol
     
-    init() {
+    init(delegate: ResolveMatchingCardsResultProtocol) {
+        self.delegate = delegate
     }
     
     // TODO: add cards'theme as parameter
@@ -48,12 +54,6 @@ class GameEngine: CardTappedProtocol {
         }
     }
     
-    // Should return GameBoardViewModel
-    //func getGameBoardCards() -> [CardSlot] {
-    //    let board = gameBoard?.board
-    //    return board!
-    //}
-
     func getGameBoardCards() -> [CardViewModel] {
         let board = gameBoard?.board
         let (rows,columns) = gameBoard!.getDimensions()
@@ -64,31 +64,31 @@ class GameEngine: CardTappedProtocol {
         return viewModels
     }
     
-    private func cardHasBeenTapped(cardType: CardType) {
-        let cards = (firstCardTapped, cardType)
-        switch cards {
-        case (nil, _):
-            firstCardTapped = cardType
-        case (_ , _) where cards.0 == cards.1:
-            // Matching
-            firstCardTapped = nil
-            println("Matching!")
-        default:
-            // Not matching
-            firstCardTapped = nil
-            println("Not matching!")
-        }
-    }
+//    private func cardHasBeenTapped(cardType: CardType) {
+//        let cards = (firstCardTapped, cardType)
+//        switch cards {
+//        case (nil, _):
+//            firstCardTapped = cardType
+//        case (_ , _) where cards.0 == cards.1:
+//            // Matching
+//            firstCardTapped = nil
+//            println("Matching!")
+//        default:
+//            // Not matching
+//            firstCardTapped = nil
+//            println("Not matching!")
+//        }
+//    }
     
     // CardTappedProtocol
     func cardTapped(row: Int, column: Int) {
-        let cardSlotAt = gameBoard?[row,column]
-        
-        switch cardSlotAt! {
-        case .Empty:
-            break
-        case let .Card(ct):
-            cardHasBeenTapped(ct)
+        if let (r,c) = firstCardTapped {
+            firstCardTapped = nil
+            let r = gameBoard?.doCardsMatch(r, columnFirstCard: c, rowSecondCard: row, columnSecondCard: column)
+            self.delegate.resolveMatchingCardsResult(r!)
+        } else {
+            // TODO: prevent same card to be tapped
+            firstCardTapped = (row, column)
         }
     }
 }

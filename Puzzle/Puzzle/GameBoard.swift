@@ -28,6 +28,21 @@ struct GameBoard {
         return (self.rows, self.columns)
     }
     
+    mutating func doCardsMatch(rowFirstCard: Int, columnFirstCard: Int, rowSecondCard: Int, columnSecondCard: Int) -> CardsMatchingResult {
+        if self[rowFirstCard, columnFirstCard].getCardType() == self[rowSecondCard, columnSecondCard].getCardType() {
+            self[rowFirstCard, columnFirstCard] = CardSlot.Empty
+            self[rowSecondCard, columnSecondCard] = CardSlot.Empty
+            
+            for cs in board {
+                if cs.getCardType() != CardType.None {
+                    return CardsMatchingResult.DoMatch(false)
+                }
+            }
+            return CardsMatchingResult.DoMatch(true)
+        }
+        return CardsMatchingResult.DontMatch
+    }
+    
     subscript(row: Int, column: Int) -> CardSlot {
         get {
             assert(indexIsValidForRow(row, column: column), "Index out of range")
@@ -94,8 +109,8 @@ enum CardType: Int {
 
 typealias IsGameOver = Bool
 
-// An enum representing whether 2 cardslots match or not and if the game is over
-enum CardSlotsMatchingResult {
+// An enum representing whether 2 cards match or not and if the game is over
+enum CardsMatchingResult {
     case DontMatch
     case DoMatch(IsGameOver)
 }
