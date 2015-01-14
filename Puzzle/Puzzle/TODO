@@ -22,3 +22,18 @@
 * Message to send:
 - flip a card
 - restart a game/go to menu
+
+-----------------------------------------
+-------------- REFACTORING --------------
+-----------------------------------------
+Creates 2 interfaces: IBoardView, IBoardModel
+BoardController will be instanciated with these 2 Interfaces.
+
+BoardModel will implement IObservable: Events will be: cards added (the whole board), cards removed (always 2), card selected, card unselected.
+    --> BoardView will be registered as an observer of the Model.
+    ! If needed, the notification will contain n cardViewModel(s), instanciated using the help of an injected Factory which takes a
+      a CardModel and turned it into a CardViewModel.
+
+BoardView will have a delegate to notify the BoardController when a CardView is tapped.
+    --> that event will propagate by notifying the Model of a card selected.
+

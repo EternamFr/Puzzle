@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol GameBoardViewProtocol {
+    func despawnCardView(row: Int, column: Int);
+}
+
 class GameBoardView: UIView, CardViewTappedProtocol {
 
     private let delegate: CardViewTappedProtocol
@@ -17,6 +21,8 @@ class GameBoardView: UIView, CardViewTappedProtocol {
     
     private var tileWidth: CGFloat
     private var tileHeight: CGFloat
+    
+    private var cardViews: Dictionary<Int, CardView>
     
     // TEST ANIM
     let tilePopStartScale: CGFloat = 0.1
@@ -42,6 +48,8 @@ class GameBoardView: UIView, CardViewTappedProtocol {
         tileWidth = b.width / ((CGFloat(columns) * 2) + 1)
         tileHeight = b.height / ((CGFloat(rows) * 2) + 1)
         
+        cardViews = Dictionary<Int, CardView>()
+        
         super.init(frame: CGRectMake(0, 0, b.width, b.height))
     }
     
@@ -54,7 +62,9 @@ class GameBoardView: UIView, CardViewTappedProtocol {
         let tileY = (2 * (CGFloat(row) + 1.0) - 1.0) * tileHeight
 
         let cardView:CardView = CardView(text: text, position: CGPoint(x: tileX, y: tileY), width: tileWidth, height: tileHeight, row: row, column: column, delegate: self)
-        //cardView.alpha = 0.0
+
+        cardViews[row + column * 10] = cardView
+        
         addSubview(cardView)
         
         bounce(cardView)

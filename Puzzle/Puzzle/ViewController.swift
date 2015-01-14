@@ -59,9 +59,10 @@ class ViewController: UIViewController, CardViewTappedProtocol, ResolveMatchingC
             switch result {
             case .DontMatch:
                 // Unflip the cards
-                println("DOnt match")
+                println("Dont match")
             case .DoMatch(false):
                 println("Match, but game goes on!")
+                self.gameBoardView?
             case .DoMatch(true):
                 println("Match... and game over!")
             default:
