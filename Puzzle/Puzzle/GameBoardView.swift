@@ -9,7 +9,7 @@
 import UIKit
 
 protocol GameBoardViewProtocol {
-    func despawnCardView(row: Int, column: Int);
+    func despawnCardView(column: Int, row: Int);
 }
 
 class GameBoardView: UIView, CardViewTappedProtocol {
@@ -38,9 +38,9 @@ class GameBoardView: UIView, CardViewTappedProtocol {
         // Drawing code
     }
     */
-    init(rows: Int, columns: Int, delegate: CardViewTappedProtocol) {
-        self.rows = rows
+    init(columns: Int, rows: Int, delegate: CardViewTappedProtocol) {
         self.columns = columns
+        self.rows = rows
         self.delegate = delegate
         
         let b = UIScreen.mainScreen().bounds
@@ -57,13 +57,13 @@ class GameBoardView: UIView, CardViewTappedProtocol {
         fatalError("NSCoding not supported")
     }
     
-    func insertCard(row: Int, column: Int, text: String) {
+    func insertCard(column: Int, row: Int, text: String) {
         let tileX = (2 * (CGFloat(column) + 1.0) - 1.0) * tileWidth
         let tileY = (2 * (CGFloat(row) + 1.0) - 1.0) * tileHeight
 
-        let cardView:CardView = CardView(text: text, position: CGPoint(x: tileX, y: tileY), width: tileWidth, height: tileHeight, row: row, column: column, delegate: self)
+        let cardView:CardView = CardView(text: text, position: CGPoint(x: tileX, y: tileY), width: tileWidth, height: tileHeight, column: column, row: row, delegate: self)
 
-        cardViews[row + column * 10] = cardView
+        cardViews[column * 10 + row] = cardView
         
         addSubview(cardView)
         
@@ -101,10 +101,10 @@ class GameBoardView: UIView, CardViewTappedProtocol {
     }
     
     // CardViewTappedProtocol
-    func cardViewTapped(cardView: CardView, row: Int, column: Int) {
+    func cardViewTapped(cardView: CardView, column: Int, row: Int) {
         flip(cardView)
         
-        delegate.cardViewTapped(cardView, row: row, column: column)
+        delegate.cardViewTapped(cardView, column: column, row: row)
     }
     
 }

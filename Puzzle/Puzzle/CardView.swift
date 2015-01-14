@@ -9,14 +9,14 @@
 import UIKit
 
 protocol CardViewTappedProtocol {
-    func cardViewTapped(cardView: CardView, row: Int, column: Int);
+    func cardViewTapped(cardView: CardView, column: Int, row: Int);
 }
 
 class CardView: UIView {
     
     var textLabel: UILabel
-    let row: Int
     let column: Int
+    let row: Int
     let delegateCardViewTapped: CardViewTappedProtocol
     
     /*
@@ -27,16 +27,15 @@ class CardView: UIView {
     }
     */
     
-    init(text: String, position: CGPoint, width: CGFloat, height:CGFloat, row: Int, column:Int, delegate: CardViewTappedProtocol) {
+    init(text: String, position: CGPoint, width: CGFloat, height:CGFloat, column:Int, row: Int, delegate: CardViewTappedProtocol) {
         textLabel = UILabel(frame: CGRectMake(0, 0, width, width))
         textLabel.textAlignment = NSTextAlignment.Center
         textLabel.text = text
         textLabel.textColor = UIColor.blackColor()
         textLabel.textAlignment = NSTextAlignment.Center
         
-        self.row = row
         self.column = column
-        
+        self.row = row
         self.delegateCardViewTapped = delegate
         
         super.init(frame:CGRectMake(position.x, position.y, width, height))
@@ -56,7 +55,7 @@ class CardView: UIView {
     func handleCardViewTapped(recognizer: UITapGestureRecognizer) {
         println(self.textLabel.text! + " tapped!!!")
         self.backgroundColor = UIColor.orangeColor()
-        delegateCardViewTapped.cardViewTapped(self,row: row, column: column)
+        delegateCardViewTapped.cardViewTapped(self, column: column, row: row)
     }
     
     func applyPlainShadow(view: UIView) {

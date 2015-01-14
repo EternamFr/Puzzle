@@ -30,9 +30,9 @@ class ViewController: UIViewController, CardViewTappedProtocol, ResolveMatchingC
         
         //
         gameEngine = GameEngine(delegate: self)
-        gameEngine?.setupNewGame(2, columns: 3)
+        gameEngine?.setupNewGame(3, rows: 2)
         
-        gameBoardView = GameBoardView(rows: 2, columns: 3, delegate: self)
+        gameBoardView = GameBoardView(columns: 3, rows: 2, delegate: self)
         self.view.addSubview(gameBoardView!)
         
         self.spawnCardViews()
@@ -46,12 +46,12 @@ class ViewController: UIViewController, CardViewTappedProtocol, ResolveMatchingC
     func spawnCardViews() {
         let cardViewModels: [CardViewModel] = gameEngine!.getGameBoardCards()
         
-        map(cardViewModels, {self.gameBoardView?.insertCard($0.row, column: $0.column, text: "(\($0.column),\($0.row)) \($0.cardSlot.getCardType().simpleDescription())")})
+        map(cardViewModels, {self.gameBoardView?.insertCard($0.column, row: $0.row, text: "(\($0.column),\($0.row)) \($0.type.simpleDescription())")})
     }
     
     // CardViewTappedProtocol
-    func cardViewTapped(cardView: CardView, row: Int, column: Int) {
-        gameEngine?.cardTapped(row, column: column)
+    func cardViewTapped(cardView: CardView, column: Int, row: Int) {
+        gameEngine?.cardTapped(column, row: row)
     }
     
     // ResolveMatchingCardsResultProtocol

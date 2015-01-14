@@ -1,21 +1,24 @@
 //
-//  CardViewModel.swift
+//  Card.swift
 //  Puzzle
 //
-//  Created by David Christy on 10/01/2015.
+//  Created by David Christy on 14/01/2015.
 //  Copyright (c) 2015 David Christy. All rights reserved.
 //
 
 import Foundation
 
-struct CardViewModel {
+struct Card {
+    
     let column: Int
     let row: Int
     let type: CardType
     
-    init(column: Int, row: Int, type: CardType) {
+    init(column: Int, row: Int, cardType: CardType){
         self.column = column
         self.row = row
-        self.type = type
+        self.type = cardType
     }
+    
+    
 }
