@@ -12,6 +12,10 @@ protocol CardViewTappedProtocol {
     func cardViewTapped(cardView: CardView, column: Int, row: Int);
 }
 
+protocol CardViewFlippedProtocol {
+    func cardViewFlipped(cardView: CardView, column: Int, row: Int);
+}
+
 class CardView: UIView {
     
     var textLabel: UILabel

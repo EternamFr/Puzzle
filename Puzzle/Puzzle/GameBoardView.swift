@@ -14,8 +14,8 @@ protocol GameBoardViewProtocol {
 
 class GameBoardView: UIView, CardViewTappedProtocol {
 
-    private let delegate: CardViewTappedProtocol
-    
+    private let delegateCardTapped: CardViewTappedProtocol
+    private let delegateCardFlipped: CardViewFlippedProtocol
     private var columns: Int
     private var rows: Int
     
@@ -38,10 +38,11 @@ class GameBoardView: UIView, CardViewTappedProtocol {
         // Drawing code
     }
     */
-    init(columns: Int, rows: Int, delegate: CardViewTappedProtocol) {
+    init(columns: Int, rows: Int, delegateCardViewTapped: CardViewTappedProtocol, delegateCardViewFlipped: CardViewFlippedProtocol) {
         self.columns = columns
         self.rows = rows
-        self.delegate = delegate
+        self.delegateCardTapped = delegateCardViewTapped
+        self.delegateCardFlipped = delegateCardViewFlipped
         
         let b = UIScreen.mainScreen().bounds
         
@@ -90,23 +91,25 @@ class GameBoardView: UIView, CardViewTappedProtocol {
         })
     }
     
-    func flip(cardView: CardView) {
+    func flip(cardView: CardView, notifyToDelegate: Bool = true) {
         UIView.animateWithDuration(tileExpandTime, delay: tilePopDelay, options: UIViewAnimationOptions.TransitionNone,
             animations: { () -> Void in
                 var rotationMatrix = CATransform3DMakeRotation(CGFloat(M_PI * 90.0 / 180.0), 0.0, 1.0, 0.0)
                 cardView.layer.transform = rotationMatrix
             },
             completion: { (finished: Bool) -> Void in
-                // Shrink the tile after it 'pops'
                 UIView.animateWithDuration(self.tileContractTime, animations: { () -> Void in
                     cardView.layer.transform = CATransform3DIdentity
+                    }, completion: {(finished: Bool) -> Void in
+                        if notifyToDelegate {
+                            self.delegateCardFlipped.cardViewFlipped(cardView, column: cardView.column, row: cardView.row)
+                        }
                 })
         })
     }
     
     func despawn(cardView: CardView) {
-        UIView.animateWithDuration(2.0, animations: { () -> Void in
-                // Make the tile 'pop'
+        UIView.animateWithDuration(1.0, animations: { () -> Void in
                 cardView.layer.setAffineTransform(CGAffineTransformMakeScale(0.1, 0.1))
                 cardView.alpha = 0.0
             })
@@ -114,7 +117,7 @@ class GameBoardView: UIView, CardViewTappedProtocol {
     
     // CardViewTappedProtocol
     func cardViewTapped(cardView: CardView, column: Int, row: Int) {
-        delegate.cardViewTapped(cardView, column: column, row: row)
+        delegateCardTapped.cardViewTapped(cardView, column: column, row: row)
     }
     
     // TODO: add to protocol?
@@ -135,7 +138,7 @@ class GameBoardView: UIView, CardViewTappedProtocol {
         if let cardView = self.cardViews[cardViewId] {
             cardView.userInteractionEnabled = true
             
-            flip(cardView)
+            flip(cardView, notifyToDelegate: false)
             cardView.backgroundColor = UIColor.redColor()
         } else {
             // TODO: what to do ?!?

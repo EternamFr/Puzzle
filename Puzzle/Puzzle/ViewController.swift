@@ -8,13 +8,12 @@
 
 import UIKit
 
-class ViewController: UIViewController, CardViewTappedProtocol, ResolveMatchingCardsResultProtocol {
+class ViewController: UIViewController, CardViewTappedProtocol, CardViewFlippedProtocol, ResolveMatchingCardsResultProtocol {
 
     @IBOutlet weak var LblDebug: UILabel!
     private var gameBoardView: GameBoardView?
     private var gameBoard: GameBoard?
-    private var firstCardTapped: (column: Int, row: Int)?
-    private var secondCardTapped: (column: Int, row: Int)?
+    private var firstCardFlipped: CardLocation?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,7 +42,7 @@ class ViewController: UIViewController, CardViewTappedProtocol, ResolveMatchingC
     func setupNewGame(columns: Int, rows: Int){
         gameBoard = GameBoard(columns: columns, rows: rows)
         
-        gameBoardView = GameBoardView(columns: columns, rows: rows, delegate: self)
+        gameBoardView = GameBoardView(columns: columns, rows: rows, delegateCardViewTapped: self, delegateCardViewFlipped: self)
         self.view.addSubview(gameBoardView!)
         
         self.spawnCardViews()
@@ -68,14 +67,16 @@ class ViewController: UIViewController, CardViewTappedProtocol, ResolveMatchingC
     // CardViewTappedProtocol
     func cardViewTapped(cardView: CardView, column: Int, row: Int) {
         self.gameBoardView?.flipAndLockCardView(column, row: row)
-        
-        if let (columnFirst, rowFirst) = firstCardTapped {
-            firstCardTapped = nil
-            let r = gameBoard?.doCardsMatch(columnFirst, rowFirstCard: rowFirst, columnSecondCard: column, rowSecondCard: row)
-            
-            self.resolveMatchingCardsResult(r!)
+    }
+    
+    // CardViewFlippedProtocol
+    func cardViewFlipped(cardView: CardView, column: Int, row: Int) {
+        if self.firstCardFlipped? == nil {
+            firstCardFlipped = CardLocation(column: column, row: row)
         } else {
-            firstCardTapped = (column, row)
+            let r = gameBoard?.doCardsMatch(firstCardFlipped!, second: CardLocation(column: column, row: row))
+            firstCardFlipped = nil
+            self.resolveMatchingCardsResult(r!)
         }
     }
     

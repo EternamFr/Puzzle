@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct CardLocation {
+struct CardLocation: Equatable {
     let column: Int
     let row: Int
     
@@ -16,5 +16,9 @@ struct CardLocation {
         self.column = column
         self.row = row
     }
-    
+
+}
+
+func == (lhs: CardLocation, rhs: CardLocation) -> Bool {
+    return lhs.column == rhs.column && lhs.row == rhs.row
 }

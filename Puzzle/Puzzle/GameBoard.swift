@@ -87,15 +87,12 @@ struct GameBoard {
         return (self.columns, self.rows)
     }
     
-    mutating func doCardsMatch(columnFirstCard: Int, rowFirstCard: Int, columnSecondCard: Int, rowSecondCard: Int) -> CardsMatchingResult {
-        let firstCardLocation = CardLocation(column: columnFirstCard, row: rowFirstCard)
-        let secondCardLocation = CardLocation(column: columnSecondCard, row: rowSecondCard)
-        
-        let cardLocations = [firstCardLocation, secondCardLocation]
+    mutating func doCardsMatch(first: CardLocation, second: CardLocation) -> CardsMatchingResult {
+        let cardLocations = [first, second]
     
-        if self[columnFirstCard, rowFirstCard].type == self[columnSecondCard, rowSecondCard].type {
-            self[columnFirstCard, rowFirstCard] = Card(column: columnFirstCard, row: rowFirstCard, cardType: CardType.None)
-            self[columnSecondCard, rowSecondCard] = Card(column: columnSecondCard, row: rowSecondCard, cardType: CardType.None)
+        if self[first.column, first.row].type == self[second.column, second.row].type {
+            self[first.column, first.row] = Card(column: first.column, row: first.row, cardType: CardType.None)
+            self[second.column, second.row] = Card(column: second.column, row: second.row, cardType: CardType.None)
             
             for cs in board {
                 if cs.type != CardType.None {
