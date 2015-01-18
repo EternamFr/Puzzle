@@ -54,7 +54,6 @@ class CardView: UIView {
 
     func handleCardViewTapped(recognizer: UITapGestureRecognizer) {
         println(self.textLabel.text! + " tapped!!!")
-        self.backgroundColor = UIColor.orangeColor()
         delegateCardViewTapped.cardViewTapped(self, column: column, row: row)
     }
     

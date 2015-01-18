@@ -63,11 +63,15 @@ class GameBoardView: UIView, CardViewTappedProtocol {
 
         let cardView:CardView = CardView(text: text, position: CGPoint(x: tileX, y: tileY), width: tileWidth, height: tileHeight, column: column, row: row, delegate: self)
 
-        cardViews[column * 10 + row] = cardView
+        cardViews[self.getCardViewId(column, row: row)] = cardView
         
         addSubview(cardView)
         
         bounce(cardView)
+    }
+    
+    private func getCardViewId(column: Int, row: Int) -> Int {
+        return column * 10 + row
     }
     
     func bounce(cardView: CardView) {
@@ -100,11 +104,53 @@ class GameBoardView: UIView, CardViewTappedProtocol {
         })
     }
     
+    func despawn(cardView: CardView) {
+        UIView.animateWithDuration(tileExpandTime, delay: tilePopDelay, options: UIViewAnimationOptions.TransitionNone,
+            animations: { () -> Void in
+                // Make the tile 'pop'
+                cardView.layer.setAffineTransform(CGAffineTransformMakeScale(0, 0))
+                cardView.alpha = 0.0
+            },
+            completion: nil)
+    }
+    
     // CardViewTappedProtocol
     func cardViewTapped(cardView: CardView, column: Int, row: Int) {
-        flip(cardView)
-        
         delegate.cardViewTapped(cardView, column: column, row: row)
+    }
+    
+    // TODO: add to protocol?
+    func flipAndLockCardView(column: Int, row: Int) {
+        let cardViewId = self.getCardViewId(column, row: row)
+        if let cardView = self.cardViews[cardViewId] {
+            cardView.backgroundColor = UIColor.orangeColor()
+            flip(cardView)
+            cardView.userInteractionEnabled = false
+        } else {
+            // TODO: what to do ?!?
+        }
+    }
+    
+    func unflipAndUnlockCardView(column: Int, row: Int) {
+        let cardViewId = self.getCardViewId(column, row: row)
+        if let cardView = self.cardViews[cardViewId] {
+            flip(cardView)
+            cardView.userInteractionEnabled = true
+            cardView.backgroundColor = UIColor.redColor()
+        } else {
+            // TODO: what to do ?!?
+        }
+    }
+    
+    func despawnCardView(column: Int, row: Int) {
+        let cardViewId = self.getCardViewId(column, row: row)
+        if let cardView = self.cardViews[cardViewId] {
+            self.cardViews.removeValueForKey(cardViewId)
+            
+            despawn(cardView)
+        } else {
+            // TODO: what to do ?!?
+        }
     }
     
 }

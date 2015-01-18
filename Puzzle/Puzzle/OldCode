@@ -1,0 +1,15 @@
+//    private func cardHasBeenTapped(cardType: CardType) {
+//        let cards = (firstCardTapped, cardType)
+//        switch cards {
+//        case (nil, _):
+//            firstCardTapped = cardType
+//        case (_ , _) where cards.0 == cards.1:
+//            // Matching
+//            firstCardTapped = nil
+//            println("Matching!")
+//        default:
+//            // Not matching
+//            firstCardTapped = nil
+//            println("Not matching!")
+//        }
+//    }

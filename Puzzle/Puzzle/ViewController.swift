@@ -11,8 +11,9 @@ import UIKit
 class ViewController: UIViewController, CardViewTappedProtocol, ResolveMatchingCardsResultProtocol {
 
     @IBOutlet weak var LblDebug: UILabel!
-    var gameEngine: GameEngine?
-    var gameBoardView: GameBoardView?
+    private var gameBoardView: GameBoardView?
+    private var gameBoard: GameBoard?
+    private var firstCardTapped: (column: Int, row: Int)?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,8 +30,7 @@ class ViewController: UIViewController, CardViewTappedProtocol, ResolveMatchingC
         let b = UIScreen.mainScreen().bounds
         
         //
-        gameEngine = GameEngine(delegate: self)
-        gameEngine?.setupNewGame(3, rows: 2)
+        self.setupNewGame(3, rows: 2)
         
         gameBoardView = GameBoardView(columns: 3, rows: 2, delegate: self)
         self.view.addSubview(gameBoardView!)
@@ -43,28 +43,57 @@ class ViewController: UIViewController, CardViewTappedProtocol, ResolveMatchingC
         // Dispose of any resources that can be recreated.
     }
 
+    // TODO: add cards'theme as parameter
+    func setupNewGame(columns: Int, rows: Int){
+        gameBoard = GameBoard(columns: columns, rows: rows)
+    }
+    
     func spawnCardViews() {
-        let cardViewModels: [CardViewModel] = gameEngine!.getGameBoardCards()
+        let cardViewModels: [CardViewModel] = self.getGameBoardCards()
         
         map(cardViewModels, {self.gameBoardView?.insertCard($0.column, row: $0.row, text: "(\($0.column),\($0.row)) \($0.type.simpleDescription())")})
+    }
+
+    func getGameBoardCards() -> [CardViewModel] {
+        let board = gameBoard?.board
+        let (columns, rows) = gameBoard!.getDimensions()
+        
+        let indexes = map(0..<gameBoard!.board.count, { $0 })
+        
+        let viewModels = indexes.map{CardViewModel(column: $0 % columns,row: $0 / columns, type: board![$0].type)}
+        return viewModels
     }
     
     // CardViewTappedProtocol
     func cardViewTapped(cardView: CardView, column: Int, row: Int) {
-        gameEngine?.cardTapped(column, row: row)
+        self.gameBoardView?.flipAndLockCardView(column, row: row)
+        
+        if let (columnFirst, rowFirst) = firstCardTapped {
+            firstCardTapped = nil
+            let r = gameBoard?.doCardsMatch(columnFirst, rowFirstCard: rowFirst, columnSecondCard: column, rowSecondCard: row)
+            
+            self.resolveMatchingCardsResult(r!)
+        } else {
+            // TODO: prevent same card to be tapped
+            firstCardTapped = (column, row)
+        }
     }
     
     // ResolveMatchingCardsResultProtocol
     func resolveMatchingCardsResult(result: CardsMatchingResult) {
-            switch result {
+            switch result.result {
             case .DontMatch:
-                // Unflip the cards
                 println("Dont match")
+                
+                result.cardLocations.map{self.gameBoardView?.unflipAndUnlockCardView($0.column, row: $0.row)}
             case .DoMatch(false):
                 println("Match, but game goes on!")
-                self.gameBoardView?
+                
+                result.cardLocations.map{self.gameBoardView?.despawnCardView($0.column, row: $0.row)}
             case .DoMatch(true):
                 println("Match... and game over!")
+                
+                result.cardLocations.map{self.gameBoardView?.despawnCardView($0.column, row: $0.row)}                
             default:
                 println("What could that be ?!?")
         }

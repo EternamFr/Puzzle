@@ -8,12 +8,16 @@
 
 import Foundation
 
-protocol PGameBoardModel {
+protocol PGameBoardModelNotification {
     func cardsAdded([CardViewModel]);
     func cardsRemoved([CardViewModel]);
     func cardSelected(CardViewModel);
     func cardUnselected([CardViewModel]);
     func gameOver();
+}
+
+protocol ResolveMatchingCardsResultProtocol {
+    func resolveMatchingCardsResult(result: CardsMatchingResult)
 }
 
 struct GameBoard {
@@ -22,12 +26,34 @@ struct GameBoard {
     let rows: Int
     var board: [Card]
     
+    var observers: [PGameBoardModelNotification]
+    
     init(columns: Int, rows: Int) {
         self.columns = columns
         self.rows = rows
         self.board = [Card]()
+        observers = [PGameBoardModelNotification]()
         
         populateGameBoardWithPairsOfCards()
+    }
+
+    subscript(column: Int, row: Int) -> Card {
+        get {
+            assert(indexIsValidForRow(column, row: row), "Index out of range")
+            return board[(columns * row) + column]
+        }
+        set {
+            assert(indexIsValidForRow(column, row: row), "Index out of range")
+            board[(columns * row) + column] = newValue
+        }
+    }
+    
+    mutating func RegisterForNotification(observer: PGameBoardModelNotification) {
+        observers.append(observer)
+    }
+    
+    mutating func UnregisterForNotification(observer: PGameBoardModelNotification) {
+        // TODO: implement
     }
     
     mutating private func populateGameBoardWithPairsOfCards() {
@@ -62,29 +88,23 @@ struct GameBoard {
     }
     
     mutating func doCardsMatch(columnFirstCard: Int, rowFirstCard: Int, columnSecondCard: Int, rowSecondCard: Int) -> CardsMatchingResult {
+        let firstCardLocation = CardLocation(column: columnFirstCard, row: rowFirstCard)
+        let secondCardLocation = CardLocation(column: columnSecondCard, row: rowSecondCard)
+        
+        let cardLocations = [firstCardLocation, secondCardLocation]
+    
         if self[columnFirstCard, rowFirstCard].type == self[columnSecondCard, rowSecondCard].type {
             self[columnFirstCard, rowFirstCard] = Card(column: columnFirstCard, row: rowFirstCard, cardType: CardType.None)
             self[columnSecondCard, rowSecondCard] = Card(column: columnSecondCard, row: rowSecondCard, cardType: CardType.None)
             
             for cs in board {
                 if cs.type != CardType.None {
-                    return CardsMatchingResult.DoMatch(false)
+                    return CardsMatchingResult(result: Result.DoMatch(false), cardLocations: cardLocations)
                 }
             }
-            return CardsMatchingResult.DoMatch(true)
+            return CardsMatchingResult(result: Result.DoMatch(true), cardLocations: cardLocations)
         }
-        return CardsMatchingResult.DontMatch
-    }
-    
-    subscript(column: Int, row: Int) -> Card {
-        get {
-            assert(indexIsValidForRow(column, row: row), "Index out of range")
-            return board[(columns * row) + column]
-        }
-        set {
-            assert(indexIsValidForRow(column, row: row), "Index out of range")
-            board[(columns * row) + column] = newValue
-        }
+        return CardsMatchingResult(result: Result.DontMatch, cardLocations: cardLocations)
     }
 
 }

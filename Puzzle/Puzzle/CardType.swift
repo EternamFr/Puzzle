@@ -34,8 +34,7 @@ enum CardType: Int {
     
     static func getRandomCardType() -> CardType {
         // TODO: add the possibility to choose a set of card based on a theme (jungle, pirate, halloween...)
-        srandom(arc4random())
-        let randomInt = random() % getCardTypeCount()
+        let randomInt: Int = Int(rand()) % (getCardTypeCount() - 1)
         println(randomInt)
         if let cardType = CardType(rawValue: randomInt) {
             return cardType
