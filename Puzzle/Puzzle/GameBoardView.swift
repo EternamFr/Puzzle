@@ -105,13 +105,11 @@ class GameBoardView: UIView, CardViewTappedProtocol {
     }
     
     func despawn(cardView: CardView) {
-        UIView.animateWithDuration(tileExpandTime, delay: tilePopDelay, options: UIViewAnimationOptions.TransitionNone,
-            animations: { () -> Void in
+        UIView.animateWithDuration(2.0, animations: { () -> Void in
                 // Make the tile 'pop'
-                cardView.layer.setAffineTransform(CGAffineTransformMakeScale(0, 0))
+                cardView.layer.setAffineTransform(CGAffineTransformMakeScale(0.1, 0.1))
                 cardView.alpha = 0.0
-            },
-            completion: nil)
+            })
     }
     
     // CardViewTappedProtocol
@@ -123,9 +121,10 @@ class GameBoardView: UIView, CardViewTappedProtocol {
     func flipAndLockCardView(column: Int, row: Int) {
         let cardViewId = self.getCardViewId(column, row: row)
         if let cardView = self.cardViews[cardViewId] {
+            cardView.userInteractionEnabled = false
+            
             cardView.backgroundColor = UIColor.orangeColor()
             flip(cardView)
-            cardView.userInteractionEnabled = false
         } else {
             // TODO: what to do ?!?
         }
@@ -134,8 +133,9 @@ class GameBoardView: UIView, CardViewTappedProtocol {
     func unflipAndUnlockCardView(column: Int, row: Int) {
         let cardViewId = self.getCardViewId(column, row: row)
         if let cardView = self.cardViews[cardViewId] {
-            flip(cardView)
             cardView.userInteractionEnabled = true
+            
+            flip(cardView)
             cardView.backgroundColor = UIColor.redColor()
         } else {
             // TODO: what to do ?!?

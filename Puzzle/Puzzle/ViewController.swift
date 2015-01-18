@@ -14,6 +14,7 @@ class ViewController: UIViewController, CardViewTappedProtocol, ResolveMatchingC
     private var gameBoardView: GameBoardView?
     private var gameBoard: GameBoard?
     private var firstCardTapped: (column: Int, row: Int)?
+    private var secondCardTapped: (column: Int, row: Int)?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,11 +32,6 @@ class ViewController: UIViewController, CardViewTappedProtocol, ResolveMatchingC
         
         //
         self.setupNewGame(3, rows: 2)
-        
-        gameBoardView = GameBoardView(columns: 3, rows: 2, delegate: self)
-        self.view.addSubview(gameBoardView!)
-        
-        self.spawnCardViews()
     }
 
     override func didReceiveMemoryWarning() {
@@ -46,6 +42,11 @@ class ViewController: UIViewController, CardViewTappedProtocol, ResolveMatchingC
     // TODO: add cards'theme as parameter
     func setupNewGame(columns: Int, rows: Int){
         gameBoard = GameBoard(columns: columns, rows: rows)
+        
+        gameBoardView = GameBoardView(columns: columns, rows: rows, delegate: self)
+        self.view.addSubview(gameBoardView!)
+        
+        self.spawnCardViews()
     }
     
     func spawnCardViews() {
@@ -74,7 +75,6 @@ class ViewController: UIViewController, CardViewTappedProtocol, ResolveMatchingC
             
             self.resolveMatchingCardsResult(r!)
         } else {
-            // TODO: prevent same card to be tapped
             firstCardTapped = (column, row)
         }
     }

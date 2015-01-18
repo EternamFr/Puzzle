@@ -49,7 +49,7 @@
 		24CCBA261A1552BE008357B0 /* Puzzle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Puzzle.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		24CCBA2A1A1552BE008357B0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		24CCBA2B1A1552BE008357B0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		24CCBA2D1A1552BE008357B0 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = ../ViewController.swift; sourceTree = "<group>"; };
+		24CCBA2D1A1552BE008357B0 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		24CCBA301A1552BE008357B0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		24CCBA321A1552BE008357B0 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		24CCBA351A1552BE008357B0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -79,7 +79,6 @@
 		244E27E61A34A413000D626A /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				24CCBA2D1A1552BE008357B0 /* ViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -139,6 +138,7 @@
 				245A9F5B1A378EE30044A1B6 /* Model */,
 				244E27E61A34A413000D626A /* Controllers */,
 				24CCBA2B1A1552BE008357B0 /* AppDelegate.swift */,
+				24CCBA2D1A1552BE008357B0 /* ViewController.swift */,
 				24CCBA2F1A1552BE008357B0 /* Main.storyboard */,
 				24CCBA321A1552BE008357B0 /* Images.xcassets */,
 				24CCBA341A1552BE008357B0 /* LaunchScreen.xib */,
