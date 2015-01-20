@@ -15,12 +15,42 @@
                     <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sVy-4v-GNG">
+                                <rect key="frame" x="240" y="285" width="120" height="30"/>
+                                <state key="normal" title="Start Game!">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="btStartGame:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="mTh-TD-lOp"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TfM-Cf-slu">
+                                <rect key="frame" x="279" y="256" width="42" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="FcQ-sc-v8x"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="centerY" secondItem="sVy-4v-GNG" secondAttribute="centerY" id="0in-gn-Xh1"/>
+                            <constraint firstItem="sVy-4v-GNG" firstAttribute="top" secondItem="TfM-Cf-slu" secondAttribute="bottom" constant="8" symbolic="YES" id="A4B-sI-4cc"/>
+                            <constraint firstAttribute="centerX" secondItem="sVy-4v-GNG" secondAttribute="centerX" id="BoF-9u-qyS"/>
+                            <constraint firstItem="TfM-Cf-slu" firstAttribute="centerX" secondItem="sVy-4v-GNG" secondAttribute="centerX" id="XC0-cv-JhT"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="BtStart" destination="sVy-4v-GNG" id="96h-eM-ZbQ"/>
+                        <outlet property="LblDebug" destination="TfM-Cf-slu" id="ntt-O8-BTN"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-32" y="178"/>
+            <point key="canvasLocation" x="540" y="278"/>
         </scene>
     </scenes>
 </document>

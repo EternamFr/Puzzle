@@ -10,6 +10,7 @@ import UIKit
 
 class ViewController: UIViewController, CardViewTappedProtocol, CardViewFlippedProtocol, ResolveMatchingCardsResultProtocol {
 
+    @IBOutlet weak var BtStart: UIButton!
     @IBOutlet weak var LblDebug: UILabel!
     private var gameBoardView: GameBoardView?
     private var gameBoard: GameBoard?
@@ -26,11 +27,6 @@ class ViewController: UIViewController, CardViewTappedProtocol, CardViewFlippedP
         v.layer.borderWidth = 4.0
         v.layer.borderColor = UIColor.redColor().CGColor
         self.view.addSubview(v)
-        
-        let b = UIScreen.mainScreen().bounds
-        
-        //
-        self.setupNewGame(3, rows: 2)
     }
 
     override func didReceiveMemoryWarning() {
@@ -38,6 +34,12 @@ class ViewController: UIViewController, CardViewTappedProtocol, CardViewFlippedP
         // Dispose of any resources that can be recreated.
     }
 
+    @IBAction func btStartGame(sender: UIButton) {
+        LblDebug.text = ""
+        BtStart.hidden = true
+        self.setupNewGame(3, rows: 2)
+    }
+    
     // TODO: add cards'theme as parameter
     func setupNewGame(columns: Int, rows: Int){
         gameBoard = GameBoard(columns: columns, rows: rows)
@@ -46,6 +48,15 @@ class ViewController: UIViewController, CardViewTappedProtocol, CardViewFlippedP
         self.view.addSubview(gameBoardView!)
         
         self.spawnCardViews()
+    }
+    
+    func cleanOldGame() {
+        self.gameBoard = nil
+        self.gameBoardView?.removeFromSuperview()
+        self.gameBoardView = nil
+        
+        LblDebug.text = "Well done!"
+        BtStart.hidden = false
     }
     
     func spawnCardViews() {
@@ -94,7 +105,8 @@ class ViewController: UIViewController, CardViewTappedProtocol, CardViewFlippedP
             case .DoMatch(true):
                 println("Match... and game over!")
                 
-                result.cardLocations.map{self.gameBoardView?.despawnCardView($0.column, row: $0.row)}                
+                result.cardLocations.map{self.gameBoardView?.despawnCardView($0.column, row: $0.row)}
+                self.cleanOldGame()
             default:
                 println("What could that be ?!?")
         }

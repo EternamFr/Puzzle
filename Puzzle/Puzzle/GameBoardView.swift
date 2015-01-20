@@ -26,7 +26,7 @@ class GameBoardView: UIView, CardViewTappedProtocol {
     
     // TEST ANIM
     let tilePopStartScale: CGFloat = 0.1
-    let tilePopMaxScale: CGFloat = 1.1
+    let tilePopMaxScale: CGFloat = 1.2
     let tilePopDelay: NSTimeInterval = 0.05
     let tileExpandTime: NSTimeInterval = 0.4 // 0.18
     let tileContractTime: NSTimeInterval = 0.4

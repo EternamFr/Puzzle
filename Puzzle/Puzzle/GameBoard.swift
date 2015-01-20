@@ -57,26 +57,10 @@ struct GameBoard {
     }
     
     mutating private func populateGameBoardWithPairsOfCards() {
-        var ct: CardType?
-        var binome: Int = 0
-        for c in 0..<self.rows {
-            for r in 0..<self.columns {
-                if ct == nil {
-                    ct = CardType.getRandomCardType()
-                }
-                
-                binome += 1
-                
-                board.append(Card(column: c, row: r, cardType: ct!))
-                
-                if binome == 2 {
-                    ct = nil
-                    binome = 0
-                }
-            }
-        }
+        let types = CardType.getRandomCardTypes(rows*columns)
         
-        // TODO: shuffle the Cards
+        let indexes = map(0..<columns * rows, {$0})
+        indexes.map{self.board.append(Card(column: $0 % self.columns, row: $0 / self.columns, cardType: types[$0]))}
     }
     
     func indexIsValidForRow(column: Int, row: Int) -> Bool {
