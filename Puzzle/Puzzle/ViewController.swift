@@ -7,26 +7,28 @@
 //
 
 import UIKit
+import AVFoundation
 
-class ViewController: UIViewController, CardViewTappedProtocol, CardViewFlippedProtocol, ResolveMatchingCardsResultProtocol {
+class ViewController: UIViewController, CardViewTappedProtocol, CardViewFlippedProtocol, CardViewDespawnedProtocol, ResolveMatchingCardsResultProtocol {
 
     @IBOutlet weak var BtStart: UIButton!
     @IBOutlet weak var LblDebug: UILabel!
     private var gameBoardView: GameBoardView?
     private var gameBoard: GameBoard?
     private var firstCardFlipped: CardLocation?
+    private var audioPlayer = AVAudioPlayer()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view, typically from a nib.
-        var v = UIView(frame: CGRectMake(50, 50, 150, 150))
-        v.backgroundColor = UIColor.blueColor()
-        v.layer.cornerRadius = 10.0
-        v.layer.masksToBounds = true
-        v.layer.borderWidth = 4.0
-        v.layer.borderColor = UIColor.redColor().CGColor
-        self.view.addSubview(v)
+//        var v = UIView(frame: CGRectMake(50, 50, 150, 150))
+//        v.backgroundColor = UIColor.blueColor()
+//        v.layer.cornerRadius = 10.0
+//        v.layer.masksToBounds = true
+//        v.layer.borderWidth = 4.0
+//        v.layer.borderColor = UIColor.redColor().CGColor
+//        self.view.addSubview(v)
     }
 
     override func didReceiveMemoryWarning() {
@@ -44,7 +46,7 @@ class ViewController: UIViewController, CardViewTappedProtocol, CardViewFlippedP
     func setupNewGame(columns: Int, rows: Int){
         gameBoard = GameBoard(columns: columns, rows: rows)
         
-        gameBoardView = GameBoardView(columns: columns, rows: rows, delegateCardViewTapped: self, delegateCardViewFlipped: self)
+        gameBoardView = GameBoardView(columns: columns, rows: rows, delegateCardViewTapped: self, delegateCardViewFlipped: self, delegateCardViewDespawned: self)
         self.view.addSubview(gameBoardView!)
         
         self.spawnCardViews()
@@ -78,6 +80,11 @@ class ViewController: UIViewController, CardViewTappedProtocol, CardViewFlippedP
     // CardViewTappedProtocol
     func cardViewTapped(cardView: CardView, column: Int, row: Int) {
         self.gameBoardView?.flipAndLockCardView(column, row: row)
+        
+        // TODO: Play sound associated to the card ?!?
+        let soundURL = NSBundle.mainBundle().URLForResource("flip", withExtension: "wav")
+        audioPlayer = AVAudioPlayer(contentsOfURL: soundURL, error: nil)
+        audioPlayer.play()
     }
     
     // CardViewFlippedProtocol
@@ -88,6 +95,13 @@ class ViewController: UIViewController, CardViewTappedProtocol, CardViewFlippedP
             let r = gameBoard?.doCardsMatch(firstCardFlipped!, second: CardLocation(column: column, row: row))
             firstCardFlipped = nil
             self.resolveMatchingCardsResult(r!)
+        }
+    }
+    
+    // CardViewDespawnedProtocol
+    func cardViewDespawned(cardView: CardView, column: Int, row: Int, last: Bool) {
+        if last == true {
+            self.cleanOldGame()
         }
     }
     
@@ -106,10 +120,10 @@ class ViewController: UIViewController, CardViewTappedProtocol, CardViewFlippedP
                 println("Match... and game over!")
                 
                 result.cardLocations.map{self.gameBoardView?.despawnCardView($0.column, row: $0.row)}
-                self.cleanOldGame()
             default:
                 println("What could that be ?!?")
         }
     }
+    
 }
 

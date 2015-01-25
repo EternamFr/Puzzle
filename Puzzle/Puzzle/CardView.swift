@@ -16,6 +16,10 @@ protocol CardViewFlippedProtocol {
     func cardViewFlipped(cardView: CardView, column: Int, row: Int);
 }
 
+protocol CardViewDespawnedProtocol {
+    func cardViewDespawned(cardView: CardView, column: Int, row: Int, last: Bool);
+}
+
 class CardView: UIView {
     
     var textLabel: UILabel
@@ -54,6 +58,8 @@ class CardView: UIView {
         self.addGestureRecognizer(tapRecognizer)
         self.userInteractionEnabled = true;
         self.exclusiveTouch = true;
+        
+        self.alpha = 0.0
     }
 
     func handleCardViewTapped(recognizer: UITapGestureRecognizer) {

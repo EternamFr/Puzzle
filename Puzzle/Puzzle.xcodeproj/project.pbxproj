@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		244ACE111A7556AD00787958 /* flip.wav in Resources */ = {isa = PBXBuildFile; fileRef = 244ACE101A7556AD00787958 /* flip.wav */; };
+		244ACE131A755BF500787958 /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 244ACE121A755BF500787958 /* Utility.swift */; };
+		245172D81A704BDB00A1DFB5 /* GrowlingLion.wav in Resources */ = {isa = PBXBuildFile; fileRef = 245172D71A704BDB00A1DFB5 /* GrowlingLion.wav */; };
+		245172DA1A704C5100A1DFB5 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 245172D91A704C5100A1DFB5 /* AVFoundation.framework */; };
 		245A9F5D1A378F110044A1B6 /* GameBoard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245A9F5C1A378F110044A1B6 /* GameBoard.swift */; };
 		245A9F5F1A3819780044A1B6 /* TODO in Resources */ = {isa = PBXBuildFile; fileRef = 245A9F5E1A3819780044A1B6 /* TODO */; };
 		245EA7E01A6171840086FF7B /* CardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245EA7DF1A6171840086FF7B /* CardViewModel.swift */; };
@@ -36,6 +40,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		244ACE101A7556AD00787958 /* flip.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = flip.wav; sourceTree = "<group>"; };
+		244ACE121A755BF500787958 /* Utility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
+		245172D71A704BDB00A1DFB5 /* GrowlingLion.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = GrowlingLion.wav; sourceTree = "<group>"; };
+		245172D91A704C5100A1DFB5 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		245A9F5C1A378F110044A1B6 /* GameBoard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameBoard.swift; sourceTree = "<group>"; };
 		245A9F5E1A3819780044A1B6 /* TODO */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TODO; sourceTree = "<group>"; };
 		245EA7DF1A6171840086FF7B /* CardViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardViewModel.swift; sourceTree = "<group>"; };
@@ -63,6 +71,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				245172DA1A704C5100A1DFB5 /* AVFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -115,6 +124,7 @@
 		24CCBA1D1A1552BE008357B0 = {
 			isa = PBXGroup;
 			children = (
+				245172D91A704C5100A1DFB5 /* AVFoundation.framework */,
 				24CCBA281A1552BE008357B0 /* Puzzle */,
 				24CCBA3E1A1552BE008357B0 /* PuzzleTests */,
 				24CCBA271A1552BE008357B0 /* Products */,
@@ -145,6 +155,7 @@
 				24CCBA291A1552BE008357B0 /* Supporting Files */,
 				245A9F5E1A3819780044A1B6 /* TODO */,
 				246315261A6708CD00895A3D /* OldCode */,
+				244ACE121A755BF500787958 /* Utility.swift */,
 			);
 			path = Puzzle;
 			sourceTree = "<group>";
@@ -152,6 +163,8 @@
 		24CCBA291A1552BE008357B0 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				244ACE101A7556AD00787958 /* flip.wav */,
+				245172D71A704BDB00A1DFB5 /* GrowlingLion.wav */,
 				24CCBA2A1A1552BE008357B0 /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -223,6 +236,7 @@
 				TargetAttributes = {
 					24CCBA251A1552BE008357B0 = {
 						CreatedOnToolsVersion = 6.1;
+						DevelopmentTeam = S82Z7X32LG;
 					};
 					24CCBA3A1A1552BE008357B0 = {
 						CreatedOnToolsVersion = 6.1;
@@ -257,7 +271,9 @@
 				246315271A6708CD00895A3D /* OldCode in Resources */,
 				24CCBA311A1552BE008357B0 /* Main.storyboard in Resources */,
 				24CCBA361A1552BE008357B0 /* LaunchScreen.xib in Resources */,
+				245172D81A704BDB00A1DFB5 /* GrowlingLion.wav in Resources */,
 				245A9F5F1A3819780044A1B6 /* TODO in Resources */,
+				244ACE111A7556AD00787958 /* flip.wav in Resources */,
 				24CCBA331A1552BE008357B0 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -279,6 +295,7 @@
 				245A9F5D1A378F110044A1B6 /* GameBoard.swift in Sources */,
 				2488F4111A3A3860006C0422 /* GameBoardView.swift in Sources */,
 				24CCBA2E1A1552BE008357B0 /* ViewController.swift in Sources */,
+				244ACE131A755BF500787958 /* Utility.swift in Sources */,
 				2488F4131A3A3B09006C0422 /* CardView.swift in Sources */,
 				246315251A67053100895A3D /* CardsMatchingResult.swift in Sources */,
 				24CCBA2C1A1552BE008357B0 /* AppDelegate.swift in Sources */,

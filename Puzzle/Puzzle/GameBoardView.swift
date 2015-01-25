@@ -16,6 +16,7 @@ class GameBoardView: UIView, CardViewTappedProtocol {
 
     private let delegateCardTapped: CardViewTappedProtocol
     private let delegateCardFlipped: CardViewFlippedProtocol
+    private let delegateCardDespawned: CardViewDespawnedProtocol
     private var columns: Int
     private var rows: Int
     
@@ -38,11 +39,12 @@ class GameBoardView: UIView, CardViewTappedProtocol {
         // Drawing code
     }
     */
-    init(columns: Int, rows: Int, delegateCardViewTapped: CardViewTappedProtocol, delegateCardViewFlipped: CardViewFlippedProtocol) {
+    init(columns: Int, rows: Int, delegateCardViewTapped: CardViewTappedProtocol, delegateCardViewFlipped: CardViewFlippedProtocol, delegateCardViewDespawned: CardViewDespawnedProtocol) {
         self.columns = columns
         self.rows = rows
         self.delegateCardTapped = delegateCardViewTapped
         self.delegateCardFlipped = delegateCardViewFlipped
+        self.delegateCardDespawned = delegateCardViewDespawned
         
         let b = UIScreen.mainScreen().bounds
         
@@ -68,25 +70,24 @@ class GameBoardView: UIView, CardViewTappedProtocol {
         
         addSubview(cardView)
         
-        bounce(cardView)
+        let delay = Randomizer.getRandomDouble(10) / 10.0
+        bounce(cardView, delay: delay)
     }
     
     private func getCardViewId(column: Int, row: Int) -> Int {
         return column * 10 + row
     }
     
-    func bounce(cardView: CardView) {
-        UIView.animateWithDuration(tileExpandTime, delay: tilePopDelay, options: UIViewAnimationOptions.TransitionNone,
+    func bounce(cardView: CardView, delay: NSTimeInterval) {
+        UIView.animateWithDuration(tileExpandTime, delay: delay, options: UIViewAnimationOptions.TransitionNone,
             animations: { () -> Void in
-                // Make the tile 'pop'
                 cardView.layer.setAffineTransform(CGAffineTransformMakeScale(self.tilePopMaxScale, self.tilePopMaxScale))
-                //cardView.alpha = 0.5
+                cardView.alpha = 0.5
             },
             completion: { (finished: Bool) -> Void in
-                // Shrink the tile after it 'pops'
                 UIView.animateWithDuration(self.tileContractTime, animations: { () -> Void in
                     cardView.layer.setAffineTransform(CGAffineTransformIdentity)
-                    //cardView.alpha = 1.0
+                    cardView.alpha = 1.0
                 })
         })
     }
@@ -112,7 +113,10 @@ class GameBoardView: UIView, CardViewTappedProtocol {
         UIView.animateWithDuration(1.0, animations: { () -> Void in
                 cardView.layer.setAffineTransform(CGAffineTransformMakeScale(0.1, 0.1))
                 cardView.alpha = 0.0
-            })
+            }, completion: {(finished: Bool) -> Void in
+                self.delegateCardDespawned.cardViewDespawned(cardView, column: cardView.column, row: cardView.row, last: self.cardViews.count == 0)
+                cardView.removeFromSuperview()
+        })
     }
     
     // CardViewTappedProtocol

@@ -8,14 +8,14 @@
 
 import Foundation
 
-protocol PGameBoardModelNotification {
-    func cardsAdded([CardViewModel]);
-    func cardsRemoved([CardViewModel]);
-    func cardSelected(CardViewModel);
-    func cardUnselected([CardViewModel]);
-    func gameOver();
-}
-
+//protocol PGameBoardModelNotification {
+//    func cardsAdded([CardViewModel]);
+//    func cardsRemoved([CardViewModel]);
+//    func cardSelected(CardViewModel);
+//    func cardUnselected([CardViewModel]);
+//    func gameOver();
+//}
+//
 protocol ResolveMatchingCardsResultProtocol {
     func resolveMatchingCardsResult(result: CardsMatchingResult)
 }
@@ -26,13 +26,13 @@ struct GameBoard {
     let rows: Int
     var board: [Card]
     
-    var observers: [PGameBoardModelNotification]
+//    var observers: [PGameBoardModelNotification]
     
     init(columns: Int, rows: Int) {
         self.columns = columns
         self.rows = rows
         self.board = [Card]()
-        observers = [PGameBoardModelNotification]()
+//        observers = [PGameBoardModelNotification]()
         
         populateGameBoardWithPairsOfCards()
     }
@@ -48,13 +48,13 @@ struct GameBoard {
         }
     }
     
-    mutating func RegisterForNotification(observer: PGameBoardModelNotification) {
-        observers.append(observer)
-    }
-    
-    mutating func UnregisterForNotification(observer: PGameBoardModelNotification) {
-        // TODO: implement
-    }
+//    mutating func RegisterForNotification(observer: PGameBoardModelNotification) {
+//        observers.append(observer)
+//    }
+//    
+//    mutating func UnregisterForNotification(observer: PGameBoardModelNotification) {
+//        // TODO: implement
+//    }
     
     mutating private func populateGameBoardWithPairsOfCards() {
         let types = CardType.getRandomCardTypes(rows*columns)
@@ -74,18 +74,23 @@ struct GameBoard {
     mutating func doCardsMatch(first: CardLocation, second: CardLocation) -> CardsMatchingResult {
         let cardLocations = [first, second]
     
+        var result = Result.DontMatch
         if self[first.column, first.row].type == self[second.column, second.row].type {
             self[first.column, first.row] = Card(column: first.column, row: first.row, cardType: CardType.None)
             self[second.column, second.row] = Card(column: second.column, row: second.row, cardType: CardType.None)
             
-            for cs in board {
-                if cs.type != CardType.None {
-                    return CardsMatchingResult(result: Result.DoMatch(false), cardLocations: cardLocations)
-                }
-            }
-            return CardsMatchingResult(result: Result.DoMatch(true), cardLocations: cardLocations)
+            result = Result.DoMatch(IsBoardEmpty())
         }
-        return CardsMatchingResult(result: Result.DontMatch, cardLocations: cardLocations)
+        return CardsMatchingResult(result: result, cardLocations: cardLocations)
+    }
+    
+    func IsBoardEmpty() -> Bool {
+        for cs in board {
+            if cs.type != CardType.None {
+                return false
+            }
+        }
+        return true
     }
 
 }
