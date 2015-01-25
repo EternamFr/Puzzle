@@ -8,6 +8,8 @@
 
 import UIKit
 
+protocol CardViewProtocols: CardViewTappedProtocol, CardViewFlippedProtocol, CardViewDespawnedProtocol {}
+    
 protocol CardViewTappedProtocol {
     func cardViewTapped(cardView: CardView, column: Int, row: Int);
 }
@@ -25,6 +27,7 @@ class CardView: UIView {
     var textLabel: UILabel
     let column: Int
     let row: Int
+    let id: Int
     let delegateCardViewTapped: CardViewTappedProtocol
     
     /*
@@ -35,7 +38,7 @@ class CardView: UIView {
     }
     */
     
-    init(text: String, position: CGPoint, width: CGFloat, height:CGFloat, column:Int, row: Int, delegate: CardViewTappedProtocol) {
+    init(text: String, position: CGPoint, width: CGFloat, height:CGFloat, column:Int, row: Int, delegate: CardViewTappedProtocol, id: Int) {
         textLabel = UILabel(frame: CGRectMake(0, 0, width, width))
         textLabel.textAlignment = NSTextAlignment.Center
         textLabel.text = text
@@ -45,6 +48,7 @@ class CardView: UIView {
         self.column = column
         self.row = row
         self.delegateCardViewTapped = delegate
+        self.id = id
         
         super.init(frame:CGRectMake(position.x, position.y, width, height))
         

@@ -14,9 +14,7 @@ protocol GameBoardViewProtocol {
 
 class GameBoardView: UIView, CardViewTappedProtocol {
 
-    private let delegateCardTapped: CardViewTappedProtocol
-    private let delegateCardFlipped: CardViewFlippedProtocol
-    private let delegateCardDespawned: CardViewDespawnedProtocol
+    private let delegateCardViewProtocols: CardViewProtocols
     private var columns: Int
     private var rows: Int
     
@@ -39,12 +37,10 @@ class GameBoardView: UIView, CardViewTappedProtocol {
         // Drawing code
     }
     */
-    init(columns: Int, rows: Int, delegateCardViewTapped: CardViewTappedProtocol, delegateCardViewFlipped: CardViewFlippedProtocol, delegateCardViewDespawned: CardViewDespawnedProtocol) {
+    init(columns: Int, rows: Int, delegateCardViewProtocols: CardViewProtocols) {
         self.columns = columns
         self.rows = rows
-        self.delegateCardTapped = delegateCardViewTapped
-        self.delegateCardFlipped = delegateCardViewFlipped
-        self.delegateCardDespawned = delegateCardViewDespawned
+        self.delegateCardViewProtocols = delegateCardViewProtocols
         
         let b = UIScreen.mainScreen().bounds
         
@@ -64,7 +60,7 @@ class GameBoardView: UIView, CardViewTappedProtocol {
         let tileX = (2 * (CGFloat(column) + 1.0) - 1.0) * tileWidth
         let tileY = (2 * (CGFloat(row) + 1.0) - 1.0) * tileHeight
 
-        let cardView:CardView = CardView(text: text, position: CGPoint(x: tileX, y: tileY), width: tileWidth, height: tileHeight, column: column, row: row, delegate: self)
+        let cardView:CardView = CardView(text: text, position: CGPoint(x: tileX, y: tileY), width: tileWidth, height: tileHeight, column: column, row: row, delegate: self, id: self.getCardViewId(column, row: row))
 
         cardViews[self.getCardViewId(column, row: row)] = cardView
         
@@ -78,6 +74,7 @@ class GameBoardView: UIView, CardViewTappedProtocol {
         return column * 10 + row
     }
     
+    // ------------------------ Animations ------------------------
     func bounce(cardView: CardView, delay: NSTimeInterval) {
         UIView.animateWithDuration(tileExpandTime, delay: delay, options: UIViewAnimationOptions.TransitionNone,
             animations: { () -> Void in
@@ -103,7 +100,7 @@ class GameBoardView: UIView, CardViewTappedProtocol {
                     cardView.layer.transform = CATransform3DIdentity
                     }, completion: {(finished: Bool) -> Void in
                         if notifyToDelegate {
-                            self.delegateCardFlipped.cardViewFlipped(cardView, column: cardView.column, row: cardView.row)
+                            self.delegateCardViewProtocols.cardViewFlipped(cardView, column: cardView.column, row: cardView.row)
                         }
                 })
         })
@@ -114,17 +111,17 @@ class GameBoardView: UIView, CardViewTappedProtocol {
                 cardView.layer.setAffineTransform(CGAffineTransformMakeScale(0.1, 0.1))
                 cardView.alpha = 0.0
             }, completion: {(finished: Bool) -> Void in
-                self.delegateCardDespawned.cardViewDespawned(cardView, column: cardView.column, row: cardView.row, last: self.cardViews.count == 0)
+                self.cardViews.removeValueForKey(cardView.id)
+                self.delegateCardViewProtocols.cardViewDespawned(cardView, column: cardView.column, row: cardView.row, last: self.cardViews.count == 0)
                 cardView.removeFromSuperview()
         })
     }
     
     // CardViewTappedProtocol
     func cardViewTapped(cardView: CardView, column: Int, row: Int) {
-        delegateCardTapped.cardViewTapped(cardView, column: column, row: row)
+        self.delegateCardViewProtocols.cardViewTapped(cardView, column: column, row: row)
     }
     
-    // TODO: add to protocol?
     func flipAndLockCardView(column: Int, row: Int) {
         let cardViewId = self.getCardViewId(column, row: row)
         if let cardView = self.cardViews[cardViewId] {
@@ -152,8 +149,6 @@ class GameBoardView: UIView, CardViewTappedProtocol {
     func despawnCardView(column: Int, row: Int) {
         let cardViewId = self.getCardViewId(column, row: row)
         if let cardView = self.cardViews[cardViewId] {
-            self.cardViews.removeValueForKey(cardViewId)
-            
             despawn(cardView)
         } else {
             // TODO: what to do ?!?
