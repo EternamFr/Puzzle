@@ -56,7 +56,7 @@ class ViewController: UIViewController, CardViewProtocols, ResolveMatchingCardsR
     func spawnCardViews() {
         let cardViewModels: [CardViewModel] = self.getGameBoardCards()
         
-        map(cardViewModels, {self.gameBoardView?.insertCard($0.column, row: $0.row, text: "(\($0.column),\($0.row)) \($0.type.simpleDescription())")})
+        map(cardViewModels, {self.gameBoardView?.insertCard($0.column, row: $0.row, cardType: $0.type)})
     }
 
     func getGameBoardCards() -> [CardViewModel] {

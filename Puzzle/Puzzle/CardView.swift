@@ -24,39 +24,38 @@ protocol CardViewDespawnedProtocol {
 
 class CardView: UIView {
     
-    var textLabel: UILabel
+//    var textLabel: UILabel
     let column: Int
     let row: Int
     let id: Int
+    let cardType: CardType
     let delegateCardViewTapped: CardViewTappedProtocol
     
-    /*
     // Only override drawRect: if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
     override func drawRect(rect: CGRect) {
         // Drawing code
+//        let pathRect = CGRectInset(rect, rect.width * 0.2, rect.height * 0.2)
+//        let path = UIBezierPath(ovalInRect: pathRect)
+//        
+//        UIColor.blueColor().setFill()
+//        UIColor.whiteColor().setStroke()
+//        
+//        path.fill()
+//        path.stroke()
+        let renderer = ThemeRenderer()
+        renderer.RenderCardType(rect, cardType: self.cardType)
     }
-    */
     
-    init(text: String, position: CGPoint, width: CGFloat, height:CGFloat, column:Int, row: Int, delegate: CardViewTappedProtocol, id: Int) {
-        textLabel = UILabel(frame: CGRectMake(0, 0, width, width))
-        textLabel.textAlignment = NSTextAlignment.Center
-        textLabel.text = text
-        textLabel.textColor = UIColor.blackColor()
-        textLabel.textAlignment = NSTextAlignment.Center
-        
+    init(cardType: CardType, position: CGPoint, width: CGFloat, height:CGFloat, column:Int, row: Int, delegate: CardViewTappedProtocol, id: Int) {
         self.column = column
         self.row = row
+        self.cardType = cardType
         self.delegateCardViewTapped = delegate
         self.id = id
         
         super.init(frame:CGRectMake(position.x, position.y, width, height))
         
-        self.addSubview(textLabel)
-        backgroundColor = UIColor.redColor()
-        layer.cornerRadius = 0.4
-        
-        applyHoverShadow(self)
+        applyPlainShadow(self)
         
         var tapRecognizer = UITapGestureRecognizer(target: self, action: Selector("handleCardViewTapped:"))
         self.addGestureRecognizer(tapRecognizer)
@@ -67,7 +66,7 @@ class CardView: UIView {
     }
 
     func handleCardViewTapped(recognizer: UITapGestureRecognizer) {
-        println(self.textLabel.text! + " tapped!!!")
+//        println(self.textLabel.text! + " tapped!!!")
         delegateCardViewTapped.cardViewTapped(self, column: column, row: row)
     }
     

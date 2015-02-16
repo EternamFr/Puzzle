@@ -56,11 +56,11 @@ class GameBoardView: UIView, CardViewTappedProtocol {
         fatalError("NSCoding not supported")
     }
     
-    func insertCard(column: Int, row: Int, text: String) {
+    func insertCard(column: Int, row: Int, cardType: CardType) {
         let tileX = (2 * (CGFloat(column) + 1.0) - 1.0) * tileWidth
         let tileY = (2 * (CGFloat(row) + 1.0) - 1.0) * tileHeight
 
-        let cardView:CardView = CardView(text: text, position: CGPoint(x: tileX, y: tileY), width: tileWidth, height: tileHeight, column: column, row: row, delegate: self, id: self.getCardViewId(column, row: row))
+        let cardView:CardView = CardView(cardType: cardType, position: CGPoint(x: tileX, y: tileY), width: tileWidth, height: tileHeight, column: column, row: row, delegate: self, id: self.getCardViewId(column, row: row))
 
         cardViews[self.getCardViewId(column, row: row)] = cardView
         
@@ -96,6 +96,7 @@ class GameBoardView: UIView, CardViewTappedProtocol {
                 cardView.layer.transform = rotationMatrix
             },
             completion: { (finished: Bool) -> Void in
+                println("switch now!!!")
                 UIView.animateWithDuration(self.tileContractTime, animations: { () -> Void in
                     cardView.layer.transform = CATransform3DIdentity
                     }, completion: {(finished: Bool) -> Void in
