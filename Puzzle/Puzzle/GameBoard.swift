@@ -59,7 +59,7 @@ struct GameBoard {
     mutating private func populateGameBoardWithPairsOfCards() {
         let types = CardType.getRandomCardTypes(rows*columns)
         
-        let indexes = map(0..<columns * rows, {$0})
+        let indexes = (0..<columns * rows).map({$0})
         indexes.map{self.board.append(Card(column: $0 % self.columns, row: $0 / self.columns, cardType: types[$0]))}
     }
     

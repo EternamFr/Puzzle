@@ -56,14 +56,14 @@ class ViewController: UIViewController, CardViewProtocols, ResolveMatchingCardsR
     func spawnCardViews() {
         let cardViewModels: [CardViewModel] = self.getGameBoardCards()
         
-        map(cardViewModels, {self.gameBoardView?.insertCard($0.column, row: $0.row, cardType: $0.type)})
+        cardViewModels.map({self.gameBoardView?.insertCard($0.column, row: $0.row, cardType: $0.type)})
     }
 
     func getGameBoardCards() -> [CardViewModel] {
         let board = gameBoard?.board
-        let (columns, rows) = gameBoard!.getDimensions()
+        let (columns, _) = gameBoard!.getDimensions()
         
-        let indexes = map(0..<gameBoard!.board.count, { $0 })
+        let indexes = (0..<gameBoard!.board.count).map({ $0 })
         
         let viewModels = indexes.map{CardViewModel(column: $0 % columns,row: $0 / columns, type: board![$0].type)}
         return viewModels
@@ -75,12 +75,16 @@ class ViewController: UIViewController, CardViewProtocols, ResolveMatchingCardsR
         
         // TODO: Play sound associated to the card ?!?
         let soundURL = NSBundle.mainBundle().URLForResource("flip", withExtension: "wav")
-        audioPlayer = AVAudioPlayer(contentsOfURL: soundURL, error: nil)
-        audioPlayer.play()
+        do {
+            audioPlayer = try AVAudioPlayer(contentsOfURL: soundURL!)
+            audioPlayer.play()
+        } catch _ {
+        }
+        
     }
     
     func cardViewFlipped(cardView: CardView, column: Int, row: Int) {
-        if self.firstCardFlipped? == nil {
+        if self.firstCardFlipped == nil {
             firstCardFlipped = CardLocation(column: column, row: row)
         } else {
             let r = gameBoard?.doCardsMatch(firstCardFlipped!, second: CardLocation(column: column, row: row))
@@ -97,7 +101,7 @@ class ViewController: UIViewController, CardViewProtocols, ResolveMatchingCardsR
     
     // ----------------------------- ResolveMatchingCardsResultProtocol -----------------------------
     func resolveMatchingCardsResult(result: CardsMatchingResult) {
-            switch result.result {
+        switch result.result {
             case .DontMatch:
                 result.cardLocations.map{self.gameBoardView?.unflipAndUnlockCardView($0.column, row: $0.row)}
                 
@@ -106,9 +110,6 @@ class ViewController: UIViewController, CardViewProtocols, ResolveMatchingCardsR
                 
             case .DoMatch(true):
                 result.cardLocations.map{self.gameBoardView?.despawnCardView($0.column, row: $0.row)}
-                
-            default:
-                println("What could that be ?!?")
         }
     }
     

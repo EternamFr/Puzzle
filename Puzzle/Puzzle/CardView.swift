@@ -57,7 +57,7 @@ class CardView: UIView {
         
         applyPlainShadow(self)
         
-        var tapRecognizer = UITapGestureRecognizer(target: self, action: Selector("handleCardViewTapped:"))
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: Selector("handleCardViewTapped:"))
         self.addGestureRecognizer(tapRecognizer)
         self.userInteractionEnabled = true;
         self.exclusiveTouch = true;
@@ -71,7 +71,7 @@ class CardView: UIView {
     }
     
     func applyPlainShadow(view: UIView) {
-        var layer = view.layer
+        let layer = view.layer
         
         layer.shadowColor = UIColor.blackColor().CGColor
         layer.shadowOffset = CGSize(width: 0, height: 10)
@@ -84,10 +84,10 @@ class CardView: UIView {
         let width = size.width
         let height = size.height
         
-        var ovalRect = CGRect(x: 5, y: height + 5, width: width - 10, height: 15)
-        var path = UIBezierPath(roundedRect: ovalRect, cornerRadius: 10)
+        let ovalRect = CGRect(x: 5, y: height + 5, width: width - 10, height: 15)
+        let path = UIBezierPath(roundedRect: ovalRect, cornerRadius: 10)
         
-        var layer = view.layer
+        let layer = view.layer
         layer.shadowPath = path.CGPath
         layer.shadowColor = UIColor.blackColor().CGColor
         layer.shadowOpacity = 0.2
@@ -95,7 +95,7 @@ class CardView: UIView {
         layer.shadowOffset = CGSize(width: 0, height: 0)
     }
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("NSCoding not supported")
     }
     

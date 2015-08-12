@@ -52,7 +52,7 @@ class GameBoardView: UIView, CardViewTappedProtocol {
         super.init(frame: CGRectMake(0, 0, b.width, b.height))
     }
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("NSCoding not supported")
     }
     
@@ -92,11 +92,11 @@ class GameBoardView: UIView, CardViewTappedProtocol {
     func flip(cardView: CardView, notifyToDelegate: Bool = true) {
         UIView.animateWithDuration(tileExpandTime, delay: tilePopDelay, options: UIViewAnimationOptions.TransitionNone,
             animations: { () -> Void in
-                var rotationMatrix = CATransform3DMakeRotation(CGFloat(M_PI * 90.0 / 180.0), 0.0, 1.0, 0.0)
+                let rotationMatrix = CATransform3DMakeRotation(CGFloat(M_PI * 90.0 / 180.0), 0.0, 1.0, 0.0)
                 cardView.layer.transform = rotationMatrix
             },
             completion: { (finished: Bool) -> Void in
-                println("switch now!!!")
+                print("switch now!!!")
                 UIView.animateWithDuration(self.tileContractTime, animations: { () -> Void in
                     cardView.layer.transform = CATransform3DIdentity
                     }, completion: {(finished: Bool) -> Void in

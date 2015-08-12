@@ -43,7 +43,7 @@ enum CardType: Int {
         }
         
         func shuffle<T>(inout t:Array<T>, iteration:Int = 9) {
-            for i in 0...iteration {
+            for _ in 0...iteration {
                 let swapPosition1 = Int(arc4random_uniform(UInt32(t.count)))
                 let swapPosition2 = Int(arc4random_uniform(UInt32(t.count)))
                 

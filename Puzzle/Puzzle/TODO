@@ -1,4 +1,11 @@
 ------------------------------------
+// Ideas
+------------------------------------
+Cards if not matching could interact with each others. For instance, a monkey could
+throw a banana to a lion, or a lion could scare a giraf.
+
+
+------------------------------------
 // BoardModel interface
 ------------------------------------
 * Message to handle:
