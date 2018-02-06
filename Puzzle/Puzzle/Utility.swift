@@ -10,11 +10,11 @@ import Foundation
 
 class Randomizer {
 
-    class func getRandomInt(max: Int) -> Int {
+    class func getRandomInt(_ max: Int) -> Int {
         return Int(arc4random_uniform(UInt32(max)))
     }
     
-    class func getRandomDouble(max: Int) -> Double {
+    class func getRandomDouble(_ max: Int) -> Double {
         return Double(arc4random_uniform(UInt32(max)))
     }
 }

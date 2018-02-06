@@ -9,7 +9,7 @@
 import UIKit
 
 protocol GameBoardViewProtocol {
-    func despawnCardView(column: Int, row: Int);
+    func despawnCardView(_ column: Int, row: Int);
 }
 
 class GameBoardView: UIView, CardViewTappedProtocol {
@@ -26,9 +26,9 @@ class GameBoardView: UIView, CardViewTappedProtocol {
     // TEST ANIM
     let tilePopStartScale: CGFloat = 0.1
     let tilePopMaxScale: CGFloat = 1.2
-    let tilePopDelay: NSTimeInterval = 0.05
-    let tileExpandTime: NSTimeInterval = 0.4 // 0.18
-    let tileContractTime: NSTimeInterval = 0.4
+    let tilePopDelay: TimeInterval = 0.05
+    let tileExpandTime: TimeInterval = 0.4 // 0.18
+    let tileContractTime: TimeInterval = 0.4
     
     /*
     // Only override drawRect: if you perform custom drawing.
@@ -42,21 +42,21 @@ class GameBoardView: UIView, CardViewTappedProtocol {
         self.rows = rows
         self.delegateCardViewProtocols = delegateCardViewProtocols
         
-        let b = UIScreen.mainScreen().bounds
+        let b = UIScreen.main.bounds
         
         tileWidth = b.width / ((CGFloat(columns) * 2) + 1)
         tileHeight = b.height / ((CGFloat(rows) * 2) + 1)
         
         cardViews = Dictionary<Int, CardView>()
         
-        super.init(frame: CGRectMake(0, 0, b.width, b.height))
+        super.init(frame: CGRect(x: 0, y: 0, width: b.width, height: b.height))
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("NSCoding not supported")
     }
     
-    func insertCard(column: Int, row: Int, cardType: CardType) {
+    func insertCard(_ column: Int, row: Int, cardType: CardType) {
         let tileX = (2 * (CGFloat(column) + 1.0) - 1.0) * tileWidth
         let tileY = (2 * (CGFloat(row) + 1.0) - 1.0) * tileHeight
 
@@ -70,34 +70,34 @@ class GameBoardView: UIView, CardViewTappedProtocol {
         bounce(cardView, delay: delay)
     }
     
-    private func getCardViewId(column: Int, row: Int) -> Int {
+    private func getCardViewId(_ column: Int, row: Int) -> Int {
         return column * 10 + row
     }
     
     // ------------------------ Animations ------------------------
-    func bounce(cardView: CardView, delay: NSTimeInterval) {
-        UIView.animateWithDuration(tileExpandTime, delay: delay, options: UIViewAnimationOptions.TransitionNone,
+    func bounce(_ cardView: CardView, delay: TimeInterval) {
+        UIView.animate(withDuration: tileExpandTime, delay: delay, options: UIViewAnimationOptions(),
             animations: { () -> Void in
-                cardView.layer.setAffineTransform(CGAffineTransformMakeScale(self.tilePopMaxScale, self.tilePopMaxScale))
+                cardView.layer.setAffineTransform(CGAffineTransform(scaleX: self.tilePopMaxScale, y: self.tilePopMaxScale))
                 cardView.alpha = 0.5
             },
             completion: { (finished: Bool) -> Void in
-                UIView.animateWithDuration(self.tileContractTime, animations: { () -> Void in
-                    cardView.layer.setAffineTransform(CGAffineTransformIdentity)
+                UIView.animate(withDuration: self.tileContractTime, animations: { () -> Void in
+                    cardView.layer.setAffineTransform(CGAffineTransform.identity)
                     cardView.alpha = 1.0
                 })
         })
     }
     
-    func flip(cardView: CardView, notifyToDelegate: Bool = true) {
-        UIView.animateWithDuration(tileExpandTime, delay: tilePopDelay, options: UIViewAnimationOptions.TransitionNone,
+    func flip(_ cardView: CardView, notifyToDelegate: Bool = true) {
+        UIView.animate(withDuration: tileExpandTime, delay: tilePopDelay, options: UIViewAnimationOptions(),
             animations: { () -> Void in
-                let rotationMatrix = CATransform3DMakeRotation(CGFloat(M_PI * 90.0 / 180.0), 0.0, 1.0, 0.0)
+                let rotationMatrix = CATransform3DMakeRotation(CGFloat(.pi * 90.0 / 180.0), 0.0, 1.0, 0.0)
                 cardView.layer.transform = rotationMatrix
             },
             completion: { (finished: Bool) -> Void in
                 print("switch now!!!")
-                UIView.animateWithDuration(self.tileContractTime, animations: { () -> Void in
+                UIView.animate(withDuration: self.tileContractTime, animations: { () -> Void in
                     cardView.layer.transform = CATransform3DIdentity
                     }, completion: {(finished: Bool) -> Void in
                         if notifyToDelegate {
@@ -107,47 +107,47 @@ class GameBoardView: UIView, CardViewTappedProtocol {
         })
     }
     
-    func despawn(cardView: CardView) {
-        UIView.animateWithDuration(1.0, animations: { () -> Void in
-                cardView.layer.setAffineTransform(CGAffineTransformMakeScale(0.1, 0.1))
+    func despawn(_ cardView: CardView) {
+        UIView.animate(withDuration: 1.0, animations: { () -> Void in
+                cardView.layer.setAffineTransform(CGAffineTransform(scaleX: 0.1, y: 0.1))
                 cardView.alpha = 0.0
             }, completion: {(finished: Bool) -> Void in
-                self.cardViews.removeValueForKey(cardView.id)
+                self.cardViews.removeValue(forKey: cardView.id)
                 self.delegateCardViewProtocols.cardViewDespawned(cardView, column: cardView.column, row: cardView.row, last: self.cardViews.count == 0)
                 cardView.removeFromSuperview()
         })
     }
     
     // CardViewTappedProtocol
-    func cardViewTapped(cardView: CardView, column: Int, row: Int) {
+    func cardViewTapped(_ cardView: CardView, column: Int, row: Int) {
         self.delegateCardViewProtocols.cardViewTapped(cardView, column: column, row: row)
     }
     
-    func flipAndLockCardView(column: Int, row: Int) {
+    func flipAndLockCardView(_ column: Int, row: Int) {
         let cardViewId = self.getCardViewId(column, row: row)
         if let cardView = self.cardViews[cardViewId] {
-            cardView.userInteractionEnabled = false
+            cardView.isUserInteractionEnabled = false
             
-            cardView.backgroundColor = UIColor.orangeColor()
+            cardView.backgroundColor = UIColor.orange
             flip(cardView)
         } else {
             // TODO: what to do ?!?
         }
     }
     
-    func unflipAndUnlockCardView(column: Int, row: Int) {
+    func unflipAndUnlockCardView(_ column: Int, row: Int) {
         let cardViewId = self.getCardViewId(column, row: row)
         if let cardView = self.cardViews[cardViewId] {
-            cardView.userInteractionEnabled = true
+            cardView.isUserInteractionEnabled = true
             
             flip(cardView, notifyToDelegate: false)
-            cardView.backgroundColor = UIColor.redColor()
+            cardView.backgroundColor = UIColor.red
         } else {
             // TODO: what to do ?!?
         }
     }
     
-    func despawnCardView(column: Int, row: Int) {
+    func despawnCardView(_ column: Int, row: Int) {
         let cardViewId = self.getCardViewId(column, row: row)
         if let cardView = self.cardViews[cardViewId] {
             despawn(cardView)

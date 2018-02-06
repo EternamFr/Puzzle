@@ -28,14 +28,14 @@ class ViewController: UIViewController, CardViewProtocols, ResolveMatchingCardsR
         // Dispose of any resources that can be recreated.
     }
 
-    @IBAction func btStartGame(sender: UIButton) {
+    @IBAction func btStartGame(_ sender: UIButton) {
         LblDebug.text = ""
-        BtStart.hidden = true
+        BtStart.isHidden = true
         self.setupNewGame(3, rows: 2)
     }
     
     // TODO: add cards'theme as parameter
-    func setupNewGame(columns: Int, rows: Int){
+    func setupNewGame(_ columns: Int, rows: Int){
         gameBoard = GameBoard(columns: columns, rows: rows)
         
         gameBoardView = GameBoardView(columns: columns, rows: rows, delegateCardViewProtocols: self)
@@ -50,7 +50,7 @@ class ViewController: UIViewController, CardViewProtocols, ResolveMatchingCardsR
         self.gameBoardView = nil
         
         LblDebug.text = "Well done!"
-        BtStart.hidden = false
+        BtStart.isHidden = false
     }
     
     func spawnCardViews() {
@@ -70,20 +70,20 @@ class ViewController: UIViewController, CardViewProtocols, ResolveMatchingCardsR
     }
     
     // ----------------------------- CardViewProtocols -----------------------------
-    func cardViewTapped(cardView: CardView, column: Int, row: Int) {
+    func cardViewTapped(_ cardView: CardView, column: Int, row: Int) {
         self.gameBoardView?.flipAndLockCardView(column, row: row)
         
         // TODO: Play sound associated to the card ?!?
-        let soundURL = NSBundle.mainBundle().URLForResource("flip", withExtension: "wav")
+        let soundURL = Bundle.main.url(forResource: "flip", withExtension: "wav")
         do {
-            audioPlayer = try AVAudioPlayer(contentsOfURL: soundURL!)
+            audioPlayer = try AVAudioPlayer(contentsOf: soundURL!)
             audioPlayer.play()
         } catch _ {
         }
         
     }
     
-    func cardViewFlipped(cardView: CardView, column: Int, row: Int) {
+    func cardViewFlipped(_ cardView: CardView, column: Int, row: Int) {
         if self.firstCardFlipped == nil {
             firstCardFlipped = CardLocation(column: column, row: row)
         } else {
@@ -93,22 +93,22 @@ class ViewController: UIViewController, CardViewProtocols, ResolveMatchingCardsR
         }
     }
     
-    func cardViewDespawned(cardView: CardView, column: Int, row: Int, last: Bool) {
+    func cardViewDespawned(_ cardView: CardView, column: Int, row: Int, last: Bool) {
         if last == true {
             self.cleanOldGame()
         }
     }
     
     // ----------------------------- ResolveMatchingCardsResultProtocol -----------------------------
-    func resolveMatchingCardsResult(result: CardsMatchingResult) {
+    func resolveMatchingCardsResult(_ result: CardsMatchingResult) {
         switch result.result {
-            case .DontMatch:
+            case .dontMatch:
                 result.cardLocations.map{self.gameBoardView?.unflipAndUnlockCardView($0.column, row: $0.row)}
                 
-            case .DoMatch(false):
+            case .doMatch(false):
                 result.cardLocations.map{self.gameBoardView?.despawnCardView($0.column, row: $0.row)}
                 
-            case .DoMatch(true):
+            case .doMatch(true):
                 result.cardLocations.map{self.gameBoardView?.despawnCardView($0.column, row: $0.row)}
         }
     }

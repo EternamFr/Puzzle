@@ -12,8 +12,8 @@ typealias IsGameOver = Bool
 
 // An enum representing whether 2 cards match or not and if the game is over
 enum Result {
-    case DontMatch
-    case DoMatch(IsGameOver)
+    case dontMatch
+    case doMatch(IsGameOver)
 }
 
 struct CardsMatchingResult {

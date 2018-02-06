@@ -11,15 +11,15 @@ import UIKit
 protocol CardViewProtocols: CardViewTappedProtocol, CardViewFlippedProtocol, CardViewDespawnedProtocol {}
     
 protocol CardViewTappedProtocol {
-    func cardViewTapped(cardView: CardView, column: Int, row: Int);
+    func cardViewTapped(_ cardView: CardView, column: Int, row: Int);
 }
 
 protocol CardViewFlippedProtocol {
-    func cardViewFlipped(cardView: CardView, column: Int, row: Int);
+    func cardViewFlipped(_ cardView: CardView, column: Int, row: Int);
 }
 
 protocol CardViewDespawnedProtocol {
-    func cardViewDespawned(cardView: CardView, column: Int, row: Int, last: Bool);
+    func cardViewDespawned(_ cardView: CardView, column: Int, row: Int, last: Bool);
 }
 
 class CardView: UIView {
@@ -32,7 +32,7 @@ class CardView: UIView {
     let delegateCardViewTapped: CardViewTappedProtocol
     
     // Only override drawRect: if you perform custom drawing.
-    override func drawRect(rect: CGRect) {
+    override func draw(_ rect: CGRect) {
         // Drawing code
 //        let pathRect = CGRectInset(rect, rect.width * 0.2, rect.height * 0.2)
 //        let path = UIBezierPath(ovalInRect: pathRect)
@@ -53,33 +53,33 @@ class CardView: UIView {
         self.delegateCardViewTapped = delegate
         self.id = id
         
-        super.init(frame:CGRectMake(position.x, position.y, width, height))
+        super.init(frame:CGRect(x: position.x, y: position.y, width: width, height: height))
         
         applyPlainShadow(self)
         
-        let tapRecognizer = UITapGestureRecognizer(target: self, action: Selector("handleCardViewTapped:"))
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(CardView.handleCardViewTapped(_:)))
         self.addGestureRecognizer(tapRecognizer)
-        self.userInteractionEnabled = true;
-        self.exclusiveTouch = true;
+        self.isUserInteractionEnabled = true;
+        self.isExclusiveTouch = true;
         
         self.alpha = 0.0
     }
 
-    func handleCardViewTapped(recognizer: UITapGestureRecognizer) {
+    @objc func handleCardViewTapped(_ recognizer: UITapGestureRecognizer) {
 //        println(self.textLabel.text! + " tapped!!!")
         delegateCardViewTapped.cardViewTapped(self, column: column, row: row)
     }
     
-    func applyPlainShadow(view: UIView) {
+    func applyPlainShadow(_ view: UIView) {
         let layer = view.layer
         
-        layer.shadowColor = UIColor.blackColor().CGColor
+        layer.shadowColor = UIColor.black.cgColor
         layer.shadowOffset = CGSize(width: 0, height: 10)
         layer.shadowOpacity = 0.4
         layer.shadowRadius = 5
     }
     
-    func applyHoverShadow(view: UIView) {
+    func applyHoverShadow(_ view: UIView) {
         let size = view.bounds.size
         let width = size.width
         let height = size.height
@@ -88,8 +88,8 @@ class CardView: UIView {
         let path = UIBezierPath(roundedRect: ovalRect, cornerRadius: 10)
         
         let layer = view.layer
-        layer.shadowPath = path.CGPath
-        layer.shadowColor = UIColor.blackColor().CGColor
+        layer.shadowPath = path.cgPath
+        layer.shadowColor = UIColor.black.cgColor
         layer.shadowOpacity = 0.2
         layer.shadowRadius = 5
         layer.shadowOffset = CGSize(width: 0, height: 0)

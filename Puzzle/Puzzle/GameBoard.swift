@@ -17,7 +17,7 @@ import Foundation
 //}
 //
 protocol ResolveMatchingCardsResultProtocol {
-    func resolveMatchingCardsResult(result: CardsMatchingResult)
+    func resolveMatchingCardsResult(_ result: CardsMatchingResult)
 }
 
 struct GameBoard {
@@ -63,7 +63,7 @@ struct GameBoard {
         indexes.map{self.board.append(Card(column: $0 % self.columns, row: $0 / self.columns, cardType: types[$0]))}
     }
     
-    func indexIsValidForRow(column: Int, row: Int) -> Bool {
+    func indexIsValidForRow(_ column: Int, row: Int) -> Bool {
         return column >= 0 && column < columns && row >= 0 && row < rows
     }
     
@@ -71,22 +71,22 @@ struct GameBoard {
         return (self.columns, self.rows)
     }
     
-    mutating func doCardsMatch(first: CardLocation, second: CardLocation) -> CardsMatchingResult {
+    mutating func doCardsMatch(_ first: CardLocation, second: CardLocation) -> CardsMatchingResult {
         let cardLocations = [first, second]
     
-        var result = Result.DontMatch
+        var result = Result.dontMatch
         if self[first.column, first.row].type == self[second.column, second.row].type {
-            self[first.column, first.row] = Card(column: first.column, row: first.row, cardType: CardType.None)
-            self[second.column, second.row] = Card(column: second.column, row: second.row, cardType: CardType.None)
+            self[first.column, first.row] = Card(column: first.column, row: first.row, cardType: CardType.none)
+            self[second.column, second.row] = Card(column: second.column, row: second.row, cardType: CardType.none)
             
-            result = Result.DoMatch(IsBoardEmpty())
+            result = Result.doMatch(IsBoardEmpty())
         }
         return CardsMatchingResult(result: result, cardLocations: cardLocations)
     }
     
     func IsBoardEmpty() -> Bool {
         for cs in board {
-            if cs.type != CardType.None {
+            if cs.type != CardType.none {
                 return false
             }
         }
